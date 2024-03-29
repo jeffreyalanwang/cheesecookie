@@ -1,0 +1,50 @@
+body {
+    padding: 0;
+    margin: 0;
+    background: #998877;
+}
+
+.navbar {
+    background:#455ab4;
+}
+.nav-link,
+.navbar-brand {
+    color: #fff;
+    cursor: pointer;
+}
+.nav-link {
+    margin-right: 1em !important;
+}
+.nav-link:hover {
+    color: #000;
+}
+.navbar-collapse {
+    justify-content: flex-end;
+}
+
+.description {
+	left: 50%;
+	top: 45%;
+}
+.description h1 {
+	color: #000000;
+    line-height: 3;
+    text-align: center;
+}
+.description p, li {
+	color: #363636;
+	font-size: 1.3rem;
+	line-height: 1.5;
+    text-align: justify;
+}
+
+.page-footer {
+    margin-top: 1in;
+    background-color: #222222;
+    color: #cccccc;
+    padding: 60px 0 30px;
+}
+.footer-copyright {
+    color: #555555;
+    padding: 40px 0;
+}
