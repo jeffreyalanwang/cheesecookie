@@ -1,0 +1,41 @@
+body {
+    padding: 0;
+    margin: 0;
+    background: #998877;
+    /* required for sidebar */
+    display: flex;
+    width: 100%;
+    --nav-width: 50px;
+}
+
+.nav {
+    background:#000000;
+    width: var(--nav-width);
+    height: 100vh;
+    position: fixed;
+    float: right;
+    right: 0;
+}
+.nav-link,
+.navbar-brand {
+    color: #fff;
+    cursor: pointer;
+}
+.nav-link:hover {
+    color: #8d8d8d;
+}
+
+#content {
+    width: calc(100% - var(--nav-width));
+}
+
+.page-footer {
+    margin-top: 1in;
+    background-color: #222222;
+    color: #cccccc;
+    padding: 60px 0 30px;
+}
+.footer-copyright {
+    color: #555555;
+    padding: 40px 0;
+}
