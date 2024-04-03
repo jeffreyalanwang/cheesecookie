@@ -1,0 +1,113 @@
+<!--
+    Mary Johnson
+    Matthew Shimko
+    Jeffery Wang
+
+    Written by Mary Johnson
+-->
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Search</title>
+{% endblock %}
+
+{% block body %}
+<div class="content">
+
+    <h1>What are you searching for?</h1>
+
+    <form action="/search" method="POST">
+        <input type="checkbox" id="course" name="search_course" value="1"><label for="course">Courses</label>
+        <input type="checkbox" id="language" name="search_language" value="1"><label for="language">Languages</label>
+        <input type="checkbox" id="software" name="search_software" value="1"><label for="software">Software</label>
+        <br>
+
+
+        <!-- 
+            I'd like to make these visible with jquery and event listeners? 
+        -->
+        <label for="credit_hours">Credit Hours</label><br>
+        <select name="credit_hours" id="credit_hours"><br>
+            <!--
+                I don't know how to make these options based on database values.
+                Need to research more flask stuff to improve here.
+            -->
+            <option value="0"></option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select>
+        <br>
+        <!--
+        <label for="compatible_course">Compatible with Course</label><br>
+        <select name="compatible_course" id="compatible_course"><br>
+            
+                I don't know how to make these options based on database values.
+                Need to research more flask stuff to improve here.
+            
+            <option value="0"></option>
+            <option value="CourseName1">CourseName1</option>
+            <option value="CourseName2">CourseName2</option>
+        </select>
+        <br>
+
+        <label for="compatible_language">Compatible with Language</label><br>
+        <select name="compatible_language" id="compatible_language"><br>
+            <option value="0"></option>
+            <option value="Language1">Language1</option>
+            <option value="Language2">Language2</option>
+        </select>
+        <br>
+
+        <label for="compatible_software">Compatible with Software</label><br>
+        <select name="compatible_software" id="compatible_software"><br>
+            <option value="0"></option>
+            <option value="Software1">Software1</option>
+            <option value="Software2">Software2</option>
+        </select>
+        <br>
+        -->
+
+        <input type="submit" value="Search">
+    
+    </form>
+    <div id="results"></div>
+    {% if err %}
+        <div>{{ err }}</div>
+    {% endif %}
+
+    {% if courses|length < 1 %}
+    {% else %}
+        {% for course in courses %}
+            <div>
+                <img src="">
+                <a href="/course/{{ course.id }}">{{ course.title }}</a>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    {% if languages|length < 1 %}
+    {% else %}
+        {% for language in languages %}
+            <div>
+                <img src="">
+                <a href="/language/{{ language.id }}">{{ language.name }}</a>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if softwares|length < 1 %}
+    {% else %}
+        {% for software in softwares %} 
+            <div>
+                <img src="">
+                <a href="/software/{{ software.id }}">{{ software.name }}</a>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    
+
+</div>
+{% endblock %}

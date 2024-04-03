@@ -1,0 +1,24 @@
+<!--
+    Mary Johnson
+    Matthew Shimko
+    Jeffery Wang
+
+    Written by Mary Johnson
+-->
+
+{% extends 'base.html' %}
+
+{% block head %}
+<title>{{ course.title }}</title>
+{% endblock %}
+
+{% block body %}
+
+<p>{{ course.title }} </p> 
+<p>{{ course.course_code }}</p>
+<p>Credit Hours: {{ course.credit_hours }}</p>
+{% if course.description %}
+<p>{{ course.description }}</p>
+{% endif %}
+
+{% endblock %}

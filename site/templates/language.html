@@ -1,0 +1,35 @@
+<!--
+    Mary Johnson
+    Matthew Shimko
+    Jeffery Wang
+
+    Written by Mary Johnson
+-->
+
+{% extends 'base.html' %}
+
+{% block head %}
+<title>{{ language.name }}</title>
+{% endblock %}
+
+{% block body %}
+
+<p>{{ language.name }} </p> 
+
+{% if language.site_url %}
+<p><a href="{{ language.site_url }}">{{ language.site_url }}</a></p>
+{% endif %}
+
+{% if language.download_url %}
+<p><a href="{{ language.download_url }}">{{ language.download_url }}</a></p>
+{% endif %}
+
+{% if language.documentation_url %}
+<p><a href="{{ language.documentation_url }}">{{ language.documentation_url }}</a></p>
+{% endif %}
+
+{% if language.description %}
+<p>{{ language.description }}</p>
+{% endif %}
+
+{% endblock %}
