@@ -32,4 +32,20 @@
 <p>{{ software.description }}</p>
 {% endif %}
 
+{% if courses|length < 1  %}
+{% else %}
+    <p>Associated Courses:</p>
+    {% for course in courses %} 
+        <p><a href="/course/{{ course.id }}">{{ course.title }}</a></p>
+    {% endfor %}
+{% endif %}
+
+{% if languages|length < 1  %}
+{% else %}
+    <p>Associated Languages:</p>
+    {% for language in languages %} 
+        <p><a href="/language/{{ language.id }}">{{ language.name }}</a></p>
+    {% endfor %}
+{% endif %}
+
 {% endblock %}

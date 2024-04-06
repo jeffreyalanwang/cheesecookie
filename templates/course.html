@@ -17,8 +17,40 @@
 <p>{{ course.title }} </p> 
 <p>{{ course.course_code }}</p>
 <p>Credit Hours: {{ course.credit_hours }}</p>
+
+<p>
+{% if requires|length < 1  %}
+No Prerequisites
+{% else %}
+    Prerequisites: 
+    {% for i in range(0,requires|length) %} 
+        <a href="/course/{{ requires[i].id }}">{{ requires[i].course_code }}</a>{% if i != requires|length-1 %}, {% endif %}
+    {% endfor %}
+{% endif %}
+</p>
+
 {% if course.description %}
 <p>{{ course.description }}</p>
 {% endif %}
+
+
+
+{% if languages|length < 1  %}
+{% else %}
+    <p>Associated Languages:</p>
+    {% for language in languages %} 
+        <p><a href="/language/{{ language.id }}">{{ language.name }}</a></p>
+    {% endfor %}
+{% endif %}
+
+{% if softwares|length < 1  %}
+{% else %}
+    <p>Associated Software:</p>
+    {% for software in softwares %} 
+        <p><a href="/software/{{ software.id }}">{{ software.name }}</a></p>
+    {% endfor %}
+{% endif %}
+
+
 
 {% endblock %}

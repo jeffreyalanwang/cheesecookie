@@ -39,35 +39,68 @@
             <option value="4">4</option>
         </select>
         <br>
-        <!--
+        
         <label for="compatible_course">Compatible with Course</label><br>
         <select name="compatible_course" id="compatible_course"><br>
             
-                I don't know how to make these options based on database values.
-                Need to research more flask stuff to improve here.
+            <option value="0"></option>
+
+            {% if all_course|length > 0  %}
+                {% for course in all_course %} 
+                    <option value="{{ course.id }}">{{course.course_code}}: {{ course.title }}</option>
+                {% endfor %}
+            {% endif %}      
+        </select>
+        <br>
+        <!-- Issues with getting this to work on the backend
+        <label for="prerequisite_course">Prerequisite of Course</label><br>
+        <select name="prerequisite_course" id="prerequisite_course"><br>
             
             <option value="0"></option>
-            <option value="CourseName1">CourseName1</option>
-            <option value="CourseName2">CourseName2</option>
+
+            {% if all_course|length > 0  %}
+                {% for course in all_course %} 
+                    <option value="{{ course.id }}">{{course.course_code}}: {{ course.title }}</option>
+                {% endfor %}
+            {% endif %}      
         </select>
         <br>
 
+        <label for="requires_course">Requires Course</label><br>
+        <select name="requires_course" id="requires_course"><br>
+            
+            <option value="0"></option>
+
+            {% if all_course|length > 0  %}
+                {% for course in all_course %} 
+                    <option value="{{ course.id }}">{{course.course_code}}: {{ course.title }}</option>
+                {% endfor %}
+            {% endif %}      
+        </select>
+        <br>
+        -->
         <label for="compatible_language">Compatible with Language</label><br>
         <select name="compatible_language" id="compatible_language"><br>
             <option value="0"></option>
-            <option value="Language1">Language1</option>
-            <option value="Language2">Language2</option>
+            {% if all_language|length > 0  %}
+                {% for language in all_language %} 
+                    <option value="{{ language.id }}">{{ language.name }}</option>
+                {% endfor %}
+            {% endif %}  
         </select>
         <br>
 
         <label for="compatible_software">Compatible with Software</label><br>
         <select name="compatible_software" id="compatible_software"><br>
             <option value="0"></option>
-            <option value="Software1">Software1</option>
-            <option value="Software2">Software2</option>
+            {% if all_software|length > 0  %}
+                {% for software in all_software %} 
+                    <option value="{{ software.id }}">{{ software.name }}</option>
+                {% endfor %}
+            {% endif %}  
         </select>
         <br>
-        -->
+        
 
         <input type="submit" value="Search">
     
