@@ -126,16 +126,28 @@ def search():
         compatibleSoftware = request.form.get('compatible_software',False)
         compatibleCourse = request.form.get('compatible_course',False)
 
-        '''
+        
         prerequisiteCourse = request.form.get('prerequisite_course',False)
         requiresCourse = request.form.get('requires_course',False)
-        '''
+        
 
         # TODO perform the SQL queries to get the results list
         
         # If course
         if searchCourse:
             courses = Course.query
+
+            if int(prerequisiteCourse) > 0:
+                prereq = Course.query.filter_by(id=prerequisiteCourse).first()
+                courses = courses.filter(Course.prerequisite_of.contains(prereq))
+
+            if int(requiresCourse) > 0:
+                required = Course.query.filter_by(id=requiresCourse).all()
+                coursesQ = Course.query.filter_by(id=0)
+                for req in required:
+                    coursesQ = coursesQ.union(courses.filter(Course.course_requires.contains(req)))
+                courses = courses.intersect(coursesQ)
+
 
             if int(creditHours) > 0:
                 courses = courses.filter_by(credit_hours=creditHours)
@@ -146,14 +158,7 @@ def search():
             if int(compatibleSoftware) > 0:
                 courses = courses.join(Course.compatible_software).filter(Software.id==compatibleSoftware)
             
-            # difficulty implementing this correctly as self joins are not working.
-            '''
-            if int(prerequisiteCourse) > 0:
-                courses = courses.join(Course.prerequisite_of).filter(Course.id==prerequisiteCourse)
-
-            if int(requiresCourse) > 0:
-                courses = courses.join(Course.course_requires).filter(Course.id==requiresCourse)
-            '''
+        
 
             courses = courses.order_by(Course.id).all()
         else: 
