@@ -39,3 +39,7 @@ body {
     color: #555555;
     padding: 40px 0;
 }
+
+.hide {
+    display: none;
+}

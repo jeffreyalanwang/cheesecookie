@@ -8,6 +8,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
+<script src="{{ url_for('static', filename='script/search.js') }}" defer></script>
 <title>Search</title>
 {% endblock %}
 
@@ -26,6 +27,9 @@
         <!-- 
             I'd like to make these visible with jquery and event listeners? 
         -->
+        <div id="queryFields">
+
+        <div id="creditHours_block">
         <label for="credit_hours">Credit Hours</label><br>
         <select name="credit_hours" id="credit_hours"><br>
             <!--
@@ -38,21 +42,10 @@
             <option value="3">3</option>
             <option value="4">4</option>
         </select>
-        <br>
         
-        <label for="compatible_course">Compatible with Course</label><br>
-        <select name="compatible_course" id="compatible_course"><br>
-            
-            <option value="0"></option>
+        </div>
 
-            {% if all_course|length > 0  %}
-                {% for course in all_course %} 
-                    <option value="{{ course.id }}">{{course.course_code}}: {{ course.title }}</option>
-                {% endfor %}
-            {% endif %}      
-        </select>
-        <br>
-        
+        <div id="prereq_block">
         <label for="prerequisite_course">Prerequisite of Course</label><br>
         <select name="prerequisite_course" id="prerequisite_course"><br>
             
@@ -64,8 +57,10 @@
                 {% endfor %}
             {% endif %}      
         </select>
-        <br>
+        
+        </div>
 
+        <div id="req_block">
         <label for="requires_course">Requires Course</label><br>
         <select name="requires_course" id="requires_course"><br>
             
@@ -77,8 +72,25 @@
                 {% endfor %}
             {% endif %}      
         </select>
-        <br>
+        
+        </div>
 
+        <div id="compCourse_block">
+        <label for="compatible_course">Compatible with Course</label><br>
+        <select name="compatible_course" id="compatible_course"><br>
+            
+            <option value="0"></option>
+
+            {% if all_course|length > 0  %}
+                {% for course in all_course %} 
+                    <option value="{{ course.id }}">{{course.course_code}}: {{ course.title }}</option>
+                {% endfor %}
+            {% endif %}      
+        </select>
+        
+        </div>
+
+        <div id="compLang_block">
         <label for="compatible_language">Compatible with Language</label><br>
         <select name="compatible_language" id="compatible_language"><br>
             <option value="0"></option>
@@ -88,8 +100,10 @@
                 {% endfor %}
             {% endif %}  
         </select>
-        <br>
+        
+        </div>
 
+        <div id="compSoft_block">
         <label for="compatible_software">Compatible with Software</label><br>
         <select name="compatible_software" id="compatible_software"><br>
             <option value="0"></option>
@@ -99,7 +113,10 @@
                 {% endfor %}
             {% endif %}  
         </select>
-        <br>
+        
+        </div>
+
+        </div>
         
 
         <input type="submit" value="Search">

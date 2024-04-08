@@ -9,5 +9,4 @@ hPage.html => edited into index.html
 
 theArray.py => Start up Flask file before app.py was finished
 
-
 database.html => Unsure of what this is meant to be other than just a copy of hPage.html. Moving it to drafts just in case someone needs it so it doesn't clutter the root folder.

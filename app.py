@@ -60,7 +60,7 @@ class Course(db.Model):
     title = db.Column(db.String(200), unique=True, nullable=False)
     course_code = db.Column(db.String(9), nullable=False)
     credit_hours = db.Column(db.Integer,nullable=False)
-    description = db.Column(db.String(400))
+    description = db.Column(db.String(1000))
 
     compatible_language = db.relationship('Language', secondary=CourseLanguage, backref='compatible_course')
     compatible_software = db.relationship('Software', secondary=CourseSoftware, backref='compatible_course')
@@ -76,7 +76,7 @@ class Language(db.Model):
     site_url = db.Column(db.String(200))
     download_url = db.Column(db.String(200))
     documentation_url = db.Column(db.String(200))
-    description = db.Column(db.String(400))
+    description = db.Column(db.String(1000))
 
     compatible_software = db.relationship('Software', secondary=LanguageSoftware, backref='compatible_language')
 
@@ -89,7 +89,7 @@ class Software(db.Model):
     site_url = db.Column(db.String(200))
     download_url = db.Column(db.String(200))
     documentation_url = db.Column(db.String(200))
-    description = db.Column(db.String(400))
+    description = db.Column(db.String(1000))
 
     def __repr__(self):
         return '<Software: %r>' % self.name
@@ -225,6 +225,15 @@ def softwarePage(id):
     #  TODO Render with that info
     return render_template('software.html', software=software,languages=software.compatible_language, courses=software.compatible_course)
 
+
+@app.route('/explore', methods=['GET'])
+def explorePage(id):
+    #  TODO Get the entry for that ID in software database
+    courses = Course.query.all()
+    languages = Language.query.all()
+    softwares = Software.query.all()
+    #  TODO Render with that info
+    return render_template('explore.html', softwares=softwares,languages=languages, courses=courses)
 
 
 # Run in debug mode so errors get displayed
