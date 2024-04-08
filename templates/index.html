@@ -1,16 +1,43 @@
 {% extends 'base.html' %}
             
-{% block head %}<title>The Array</title>{% endblock %}
+{% block head %}
+<title>The Array</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
 
 {% block body %}
 <div class="header">
     <div style="text-align:center ; background-color: gray ; width : 300px ; height : 300 ; margin: auto">
-        <h1><br><br>The <br> Array</h1>
+        <a href="#">
+            <h1><br><br>The<br>Array<br><br></h1>
+        </a>
     </div>
 </div>
-    <div style = "background-color: gray">
-        
-    </div>
+
+<br><br>
+
+<div class="card-deck h-50 justify-content-center">
+    <a href="explore"> <div class="card w-20 border-0 rounded-0">
+      <div class="card-body">
+        <h5 class="card-title">Explore</h5>
+        <p class="card-text">See CCI courses, programming languages, and frameworks</p>
+      </div>
+    </div> </a>
+    <a href="search"> <div class="card w-20 border-0 rounded-0">
+        <div class="card-body">
+          <h5 class="card-title">Search</h5>
+          <p class="card-text">Search all The Array Content</p>
+        </div>
+    </div> </a>
+    <a href="profile"> <div class="card w-20 border-0 rounded-0">
+        <div class="card-body">
+          <h5 class="card-title">Edit</h5>
+          <p class="card-text">View and edit content created by you</p>
+        </div>
+    </div> </a>
+</div>
+
+
 {% endblock %}
     
 

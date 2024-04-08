@@ -1,11 +1,15 @@
+html {
+    background-color: #DDDDDD
+}
+
 body {
     padding: 0;
     margin: 0;
-    background: #998877;
     /* required for sidebar */
     display: flex;
     width: 100%;
     --nav-width: 50px;
+    background-color: inherit !important;
 }
 
 .nav {
@@ -27,6 +31,12 @@ body {
 
 #content {
     width: calc(100% - var(--nav-width));
+}
+
+.card {
+    border: none;
+    color: white;
+    background-color: grey!important;
 }
 
 .page-footer {
