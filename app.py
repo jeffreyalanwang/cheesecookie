@@ -225,6 +225,14 @@ def softwarePage(id):
     #  TODO Render with that info
     return render_template('software.html', software=software,languages=software.compatible_language, courses=software.compatible_course)
 
+# copied from softwarePage
+@app.route('/software/edit/<int:id>', methods=['GET'])
+def softwareEditPage(id):
+    #  TODO Get the entry for that ID in software database
+    #  TODO Render with that info
+    #software = Software.query.get_or_404(id)
+    return render_template('editor.html', software="software",languages="software.compatible_language", courses="software.compatible_course")
+
 
 @app.route('/explore', methods=['GET'])
 def explorePage(id):
