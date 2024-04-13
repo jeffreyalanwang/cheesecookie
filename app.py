@@ -8,6 +8,7 @@ Written by Mary Johnson
 
 from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
+import random
 
 '''
 array.db can be created/updated through the init_db.py file
@@ -237,9 +238,9 @@ def softwareEditPage(id):
 @app.route('/explore', methods=['GET'])
 def explorePage(id):
     #  TODO Get the entry for that ID in software database
-    courses = Course.query.all()
-    languages = Language.query.all()
-    softwares = Software.query.all()
+    courses = random.sample(Course.query.all(),3)
+    languages = random.sample(Language.query.all())
+    softwares = random.sample(Software.query.all())
     #  TODO Render with that info
     return render_template('explore.html', softwares=softwares,languages=languages, courses=courses)
 
