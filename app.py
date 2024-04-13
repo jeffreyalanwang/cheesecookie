@@ -105,7 +105,7 @@ def index():
     # Display the index page.
     return render_template('index.html')
 
-@app.route('/search', methods=['POST','GET'])
+@app.route('/search/', methods=['POST','GET'])
 def search():
 
     # Used to dynamically list courses/languages/software
@@ -226,12 +226,12 @@ def softwarePage(id):
     return render_template('software.html', software=software,languages=software.compatible_language, courses=software.compatible_course)
 
 
-@app.route('/explore', methods=['GET'])
-def explorePage(id):
+@app.route('/explore/', methods=['GET'])
+def explorePage():
     #  TODO Get the entry for that ID in software database
     courses = random.sample(Course.query.all(),3)
-    languages = random.sample(Language.query.all(),3)
-    softwares = random.sample(Software.query.all(),3)
+    languages = random.sample(Language.query.all())
+    softwares = random.sample(Software.query.all())
     #  TODO Render with that info
     return render_template('explore.html', softwares=softwares,languages=languages, courses=courses)
 
