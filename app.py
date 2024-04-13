@@ -105,7 +105,6 @@ def index():
     # Display the index page.
     return render_template('index.html')
 
-
 @app.route('/search', methods=['POST','GET'])
 def search():
 
@@ -231,8 +230,8 @@ def softwarePage(id):
 def explorePage(id):
     #  TODO Get the entry for that ID in software database
     courses = random.sample(Course.query.all(),3)
-    languages = random.sample(Language.query.all())
-    softwares = random.sample(Software.query.all())
+    languages = random.sample(Language.query.all(),3)
+    softwares = random.sample(Software.query.all(),3)
     #  TODO Render with that info
     return render_template('explore.html', softwares=softwares,languages=languages, courses=courses)
 
