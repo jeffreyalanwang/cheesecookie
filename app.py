@@ -226,12 +226,21 @@ def softwarePage(id):
     return render_template('software.html', software=software,languages=software.compatible_language, courses=software.compatible_course)
 
 # copied from softwarePage
-@app.route('/software/edit/<int:id>', methods=['GET'])
+@app.route('/software/edit/<int:id>', methods=['POST', 'GET'])
 def softwareEditPage(id):
-    #  TODO Get the entry for that ID in software database
-    #  TODO Render with that info
-    #software = Software.query.get_or_404(id)
-    return render_template('editor.html', software="software",languages="software.compatible_language", courses="software.compatible_course")
+
+    if request.method == 'POST':
+        content = request.form.get('content', False)
+        
+        # TODO save content in database
+
+    software = Software.query.get_or_404(id)
+    # TODO query for content in database
+    if False: #content:
+        return render_template('editor.html', software=software,languages=software.compatible_language, courses=software.compatible_course,
+                               content = content)
+    else:
+        return render_template('editor.html', software=software,languages=software.compatible_language, courses=software.compatible_course)
 
 
 @app.route('/explore/', methods=['GET'])
