@@ -252,6 +252,9 @@ def explorePage():
     #  TODO Render with that info
     return render_template('explore.html', softwares=softwares,languages=languages, courses=courses)
 
+@app.route('/my_content/', methods=['GET'])
+def contentListPage():
+    return render_template('explore.html', softwares=softwares,languages=languages, courses=courses)
 
 # Run in debug mode so errors get displayed
 if __name__ == "__main__":
