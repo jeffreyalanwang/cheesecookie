@@ -1,0 +1,109 @@
+<!--
+    Mary Johnson
+    Matthew Shimko
+    Jeffery Wang
+
+    Written by Jeffrey Wang
+-->
+
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Edit: {{ course.title }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/database_page.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/database_edit_page.css') }}">
+{% endblock %}
+
+{% block top %}<form>{% endblock %}
+{% block bottom %}<form>{% endblock %}
+
+{% block body %}
+
+<div id="blocks" class="container mt-5">
+    <div id="header-row" class="row g-5">
+
+        <!-- Info card -->
+        <div class="col"> <div id="details" class="overflow-auto">
+
+            <!-- Title -->
+            <input type="text" class="form-control info_title mb-3" id="title"
+                {% if course is not none %} value="{{ course.title }}" {% endif %} 
+                placeholder="Course title">
+
+            <!-- Info -->
+            <div class="container">
+
+                <div class="row d-flex align-items-center">
+                    <div class="col-sm-6 info_category"> 
+                        Course code
+                    </div>
+                    <div class="col-sm-6 info_text"> 
+                        <input type="text" class="form-control infoInput" id="course_code"
+                        {% if course is not none %} value="{{ course.course_code }}" {% endif %} 
+                        placeholder="Course code">
+                    </div>
+                </div>
+
+                <div class="row d-flex align-items-center">
+                    <div class="col-sm-6 info_category"> 
+                        Credit hours
+                    </div>
+                    <div class="col-sm-6 info_text"> 
+                        <input type="text" class="form-control infoInput" id="credit_hours"
+                        {% if course is not none %} value="{{ course.credit_hours }}" {% endif %}
+                        placeholder="Credit hours">
+                    </div>
+                </div>
+
+                <div class="row d-flex align-items-center">
+                    <div class="col-sm-6 info_category"> 
+                        Prerequisites
+                    </div>
+                    <div class="col-sm-6 info_text"> 
+                        <input type="text" class="form-control infoInput" id="course_requires"
+                        {% if course is not none and requires|length >= 1  %}value=
+                        "{% for i in range(0,requires|length) %}{{ requires[i].course_code }}{% if i != requires|length-1 %}, {% endif %}{% endfor %}"
+                        {% endif %} 
+                        placeholder="Prerequisites">
+                    </div>
+                </div> 
+
+            </div>
+
+            <!-- Description -->
+            <input type="text" class="form-control mt-4" id="description"
+                {% if course is not none %} value="{{ course.description }}" {% endif %} 
+                placeholder="Course description">
+
+        </div> </div>
+
+    </div>
+
+    <div id="links-row" class="row g-5">
+
+        <div class="col-xl-6"> <div class="links-box">
+            <h>Software Used</h>
+
+            <input type="text" class="form-control" id="softwares"
+                value="{% for i in range(0,softwares|length) %}{{ softwares[i].name }}{% if i != softwares|length-1 %}, {% endif %}{% endfor %}"
+                placeholder="Software names">
+        </div> </div>
+
+        <div class="col-xl-6"> <div class="links-box">
+            <h>Languages Used</h>
+
+            <input type="text" class="form-control" id="languages"
+                value="{% for i in range(0,languages|length) %}{{ languages[i].name }}{% if i != languages|length-1 %}, {% endif %}{% endfor %}"
+                placeholder="Language names">
+        </div> </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<!-- Will submit POST data with an entry for each form element ID -->
+<script src="{{ url_for('static', filename='js/form_submit.js') }}"></script>
+{% endblock %}

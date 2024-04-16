@@ -204,44 +204,53 @@ def search():
 
 @app.route('/course/<int:id>', methods=['GET'])
 def coursePage(id):
-    #  TODO Get the entry for that ID in course table
     course = Course.query.get_or_404(id)
-    #  TODO Render with that info
-    return render_template('course.html', course=course,languages=course.compatible_language, softwares=course.compatible_software, requires=course.course_requires)
+    return render_template('database/course.html', course=course,languages=course.compatible_language, softwares=course.compatible_software, requires=course.course_requires)
 
+@app.route('/course/<int:id>/edit', methods=['POST', 'GET'])
+def courseEditPage(id):
+
+    if request.method == 'POST':
+        results = request.form
+        # TODO save content in database
+
+    course = Course.query.get_or_404(id)
+    return render_template('database_edit/course_edit.html', course=course,languages=course.compatible_language, softwares=course.compatible_software, requires=course.course_requires)
 
 @app.route('/language/<int:id>', methods=['GET'])
 def languagePage(id):
-    #  TODO Get the entry for that ID in language table
     language = Language.query.get_or_404(id)
-    #  TODO Render with that info
-    return render_template('language.html', language=language,courses=language.compatible_course, softwares=language.compatible_software)
+    return render_template('database/language.html', language=language,courses=language.compatible_course, softwares=language.compatible_software)
     
+@app.route('/language/<int:id>/edit', methods=['POST', 'GET'])
+def languageEditPage(id):
+
+    if request.method == 'POST':
+            results = request.form
+            # TODO save content in database
+
+    language = Language.query.get_or_404(id)
+    return render_template('database_edit/language_edit.html', language=language,courses=language.compatible_course, softwares=language.compatible_software)
 
 @app.route('/software/<int:id>', methods=['GET'])
 def softwarePage(id):
-    #  TODO Get the entry for that ID in software database
     software = Software.query.get_or_404(id)
-    #  TODO Render with that info
-    return render_template('software.html', software=software,languages=software.compatible_language, courses=software.compatible_course)
+    return render_template('database/software.html', software=software,languages=software.compatible_language, courses=software.compatible_course)
 
-# copied from softwarePage
-@app.route('/software/edit/<int:id>', methods=['POST', 'GET'])
+@app.route('/software/<int:id>/edit', methods=['POST', 'GET'])
 def softwareEditPage(id):
 
     if request.method == 'POST':
-        content = request.form.get('content', False)
-        
-        # TODO save content in database
+            results = request.form
+            # TODO save content in database
 
     software = Software.query.get_or_404(id)
-    # TODO query for content in database
-    if False: #content:
-        return render_template('editor.html', software=software,languages=software.compatible_language, courses=software.compatible_course,
-                               content = content)
-    else:
-        return render_template('editor.html', software=software,languages=software.compatible_language, courses=software.compatible_course)
+    return render_template('database_edit/software_edit.html', software=software,languages=software.compatible_language, courses=software.compatible_course)
 
+@app.route('/guide/<int:id>/edit', methods=['GET'])
+def guideEditPage(id):
+    # TODO setup this part of database
+    return render_template('database_edit/guide_edit.html')
 
 @app.route('/explore/', methods=['GET'])
 def explorePage():

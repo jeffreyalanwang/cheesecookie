@@ -1,0 +1,114 @@
+<!--
+    Mary Johnson
+    Matthew Shimko
+    Jeffery Wang
+
+    Written by Jeffrey Wang
+-->
+
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Edit: {{ language.name }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/database_page.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/database_edit_page.css') }}">
+{% endblock %}
+
+{% block top %}<form>{% endblock %}
+{% block bottom %}<form>{% endblock %}
+
+{% block body %}
+
+<div id="blocks" class="container mt-5">
+    <div id="header-row" class="row g-5">
+
+        <!-- Icon or course code -->
+        <div class="col-xl-4"> <div class="ratio ratio-1x1">
+            <div id="icon">
+                <h class="icon-text">icon placeholder</h>
+            </div>
+        </div> </div>
+
+        <!-- Info card -->
+        <div class="col"> <div id="details" class="overflow-auto">
+
+            <!-- Title -->
+            <input type="text" class="form-control info_title mb-3" id="name"
+                {% if language is not none %} value="{{ language.name }}" {% endif %} 
+                placeholder="Language name">
+
+            <!-- Info -->
+            <div class="container">
+
+                <div class="row d-flex align-items-center">
+                    <div class="col-sm-6 info_category"> 
+                        Official site
+                    </div>
+                    <div class="col-sm-6 info_text"> 
+                        <input type="text" class="form-control infoInput" id="site_url"
+                        {% if language is not none %} value="{{ language.site_url }}" {% endif %} 
+                        placeholder="URL">
+                    </div>
+                </div>
+
+                <div class="row d-flex align-items-center">
+                    <div class="col-sm-6 info_category"> 
+                        Download page
+                    </div>
+                    <div class="col-sm-6 info_text"> 
+                        <input type="text" class="form-control infoInput" id="download_url"
+                        {% if language is not none %} value="{{ language.download_url }}" {% endif %}
+                        placeholder="URL">
+                    </div>
+                </div>
+
+                <div class="row d-flex align-items-center">
+                    <div class="col-sm-6 info_category"> 
+                        Documentation
+                    </div>
+                    <div class="col-sm-6 info_text"> 
+                        <input type="text" class="form-control infoInput" id="documentation_url"
+                        {% if language is not none %} value="{{ language.documentation_url }}" {% endif %}
+                        placeholder="URL">
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Description -->
+            <input type="text" class="form-control mt-4" id="description"
+                {% if language is not none %} value="{{ language.description }}" {% endif %} 
+                placeholder="Language description">
+
+        </div> </div>
+
+    </div>
+
+    <div id="links-row" class="row g-5">
+
+        <div class="col-xl-6"> <div class="links-box">
+            <h>Compatible Software</h>
+
+            <input type="text" class="form-control" id="softwares"
+                value="{% for i in range(0,softwares|length) %}{{ softwares[i].name }}{% if i != softwares|length-1 %}, {% endif %}{% endfor %}"
+                placeholder="Software names">
+        </div> </div>
+
+        <div class="col-xl-6"> <div class="links-box">
+            <h>Courses Using</h>
+
+            <input type="text" class="form-control" id="courses"
+                value="{% for i in range(0,courses|length) %}{{ courses[i].course_code }}{% if i != courses|length-1 %}, {% endif %}{% endfor %}"
+                placeholder="Course codes">
+        </div> </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<!-- Will submit POST data with an entry for each form element ID -->
+<script src="{{ url_for('static', filename='js/form_submit.js') }}"></script>
+{% endblock %}

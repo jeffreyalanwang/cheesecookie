@@ -12,8 +12,14 @@ body {
     background-color: inherit !important;
 }
 
-#edit_button {
+#edit_button, #save_button, #back_button {
+    border-radius: 0;
     display: none;
+}
+
+#save_button {
+    color:#000000;
+    background-color: greenyellow;
 }
 
 .nav {
