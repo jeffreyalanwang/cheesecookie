@@ -10,7 +10,8 @@ a {
 }
 
 .card-text{
-    font-style: italic
+    font-style: italic;
+    align-items: center
 }
 
 .card {

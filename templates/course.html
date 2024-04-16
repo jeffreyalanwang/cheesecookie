@@ -10,47 +10,116 @@
 
 {% block head %}
 <title>{{ course.title }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/database_page.css') }}">
 {% endblock %}
 
 {% block body %}
 
-<p>{{ course.title }} </p> 
-<p>{{ course.course_code }}</p>
-<p>Credit Hours: {{ course.credit_hours }}</p>
+<div id="blocks" class="container mt-5">
+    <div id="header-row" class="row g-5">
+        
+        <!-- Icon or course code -->
+        <div class="col-xl-4"> <div class="ratio ratio-1x1">
+            <div id="icon">
+                <div> {% for line in course.course_code.split() %}
 
-<p>
-{% if requires|length < 1  %}
-No Prerequisites
-{% else %}
-    Prerequisites: 
-    {% for i in range(0,requires|length) %} 
-        <a href="/course/{{ requires[i].id }}">{{ requires[i].course_code }}</a>{% if i != requires|length-1 %}, {% endif %}
-    {% endfor %}
-{% endif %}
-</p>
+                        <h class="icon-text">{{ line }}</h>
+                        <br>
+                    
+                {% endfor %} </div>
+            </div>
+        </div> </div>
 
-{% if course.description %}
-<p>{{ course.description }}</p>
-{% endif %}
+        <!-- Info card -->
+        <div class="col-xl-8"> <div id="details" class="overflow-auto">
 
+            <!-- Title -->
+            <h id="title" class="d-flex justify-content-center mb-3">{{ course.title }}</h>
+            
+            <!-- Info -->
+            <div class="container">
+                
+                <div class="row">
+                    <div class="col-sm-6 info_category"> 
+                        Course code
+                    </div>
+                    <div class="col-sm-6 info_text"> 
+                        {{ course.course_code }}
+                    </div>
+                </div>
 
+                <div class="row">
+                    <div class="col-sm-6 info_category"> 
+                        Credit hours
+                    </div>
+                    <div class="col-sm-6 info_text"> 
+                        {{ course.credit_hours }}
+                    </div>
+                </div>
 
-{% if languages|length < 1  %}
-{% else %}
-    <p>Associated Languages:</p>
-    {% for language in languages %} 
-        <p><a href="/language/{{ language.id }}">{{ language.name }}</a></p>
-    {% endfor %}
-{% endif %}
+                <div class="row">
+                    <div class="col-sm-6 info_category"> 
+                        Prerequisites
+                    </div>
+                    <div class="col-sm-6 info_text"> 
+                        {% if requires|length < 1  %}
+                        No Prerequisites
 
-{% if softwares|length < 1  %}
-{% else %}
-    <p>Associated Software:</p>
-    {% for software in softwares %} 
-        <p><a href="/software/{{ software.id }}">{{ software.name }}</a></p>
-    {% endfor %}
-{% endif %}
+                        {% else %} {% for i in range(0,requires|length) %} 
+                        <a href="/course/{{ requires[i].id }}">{{ requires[i].course_code }}</a>{% if i != requires|length-1 %}, {% endif %}
+                        {% endfor %}
 
+                        {% endif %}
+                    </div>
+                </div> 
 
+            </div>
+
+            <!-- Description -->
+            {% if course.description %}
+            <p class="mt-4">{{ course.description }}</p>
+            {% endif %}
+
+        </div> </div>
+
+    </div>
+
+    <div id="links-row" class="row g-5">
+
+        <div class="col-xl-6"> <div class="links-box">
+            <h>Software Used</h>
+
+            {% if softwares|length < 1  %}
+                <p style="font-weight: bold;">None</p>
+            {% else %}
+                <ul>
+                    {% for software in softwares %} 
+                        <li> <a href="/software/{{ software.id }}">
+                            {{ software.name }}
+                        </a> </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div> </div>
+
+        <div class="col-xl-6"> <div class="links-box">
+            <h>Languages Used</h>
+
+            {% if languages|length < 1  %}
+                <p style="font-weight: bold;">None</p>
+            {% else %}
+                <ul>
+                    {% for language in languages %} 
+                    <li> <a href="/language/{{ language.id }}">
+                        {{ language.name }}
+                    </a> </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div> </div>
+
+    </div>
+
+</div>
 
 {% endblock %}

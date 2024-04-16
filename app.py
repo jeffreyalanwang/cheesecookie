@@ -16,7 +16,7 @@ python init_db.py
 '''
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/array.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///array.db'
 db = SQLAlchemy(app)
 
 # Rules for database. Defining Columns.

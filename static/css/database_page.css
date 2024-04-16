@@ -1,0 +1,79 @@
+:root{
+    --grid-gutter-width: 5%;
+}
+
+/* applies margin to all rows; column margins are applied within each row using bootstrap classes */
+#blocks > * {
+    margin-bottom: 50px;
+}
+
+#icon {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 500;
+    font-size: 8cqw;
+    color: rgb(189, 189, 189);
+    line-height: 1;
+
+    background-color: black;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+}
+
+#details {
+    background-color: lightgrey;  
+    height: 100%;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+#details h {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.info_category {
+    text-align: right;
+    font-style: italic;
+}
+
+.info_text {
+    text-align: left;
+}
+
+.links-box {
+    background-color: #222222;
+    color: whitesmoke;
+    height: 100%;
+    padding-top: 4%;
+    padding-bottom: 6%;
+    padding-left: 6%;
+    padding-right: 6%;
+}
+
+.links-box h {
+    font-size: x-large;
+    font-weight: bold;
+    font-style: italic;
+    
+    display: block;
+    margin-bottom: 3%;
+}
+
+.links-box ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.links-box a {
+    display: block;
+    font-family: 'Courier New', Courier, monospace;
+    text-decoration: none;
+    color: inherit;
+}
