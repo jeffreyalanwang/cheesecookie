@@ -2,7 +2,8 @@
     padding-top: 10%;
     padding-bottom: 3%;
     text-align:center;
-    background-color: gray;
+    color: white;
+    background-color: #323232;
     height: 300;
     margin: auto;
 }
@@ -31,6 +32,7 @@ a {
 .card {
     width: 18rem;
     height: 18rem;
+    padding: 5%;
 }
 
 h1 {

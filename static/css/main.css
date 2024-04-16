@@ -12,6 +12,10 @@ body {
     background-color: inherit !important;
 }
 
+#edit_button {
+    display: none;
+}
+
 .nav {
     background:#000000;
     width: var(--nav-width);
@@ -35,21 +39,6 @@ body {
 
 .card {
     border: none;
-    color: white;
-    background-color: grey!important;
-}
-
-.page-footer {
-    margin-top: 1in;
-    background-color: #222222;
-    color: #cccccc;
-    padding: 60px 0 30px;
-}
-.footer-copyright {
-    color: #555555;
-    padding: 40px 0;
-}
-
-.hide {
-    display: none;
+    color: whitesmoke;
+    background-color: rgb(43, 43, 43)
 }
