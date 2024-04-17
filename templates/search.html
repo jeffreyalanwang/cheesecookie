@@ -10,18 +10,21 @@
 {% block head %}
 <script src="{{ url_for('static', filename='script/search.js') }}" defer></script>
 <title>Search</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
 {% endblock %}
 
 {% block body %}
 <div class="content">
-
-    <h1>What are you searching for?</h1>
+<div class="header p-5">
+    <h1> <div style="background-color:rgb(185, 185, 185)"><div style="height:75px">What are you searching for?</div></div></h1>
 
     <form action="/search" method="POST">
+        <div style="font-size:xx-large">
         <input type="checkbox" id="course" name="search_course" value="1"><label for="course">Courses</label>
         <input type="checkbox" id="language" name="search_language" value="1"><label for="language">Languages</label>
         <input type="checkbox" id="software" name="search_software" value="1"><label for="software">Software</label>
         <br>
+        </div>
 
 
         <!-- 
