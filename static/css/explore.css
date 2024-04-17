@@ -1,0 +1,15 @@
+.card {
+    width: 20rem;
+    height: 20rem;
+    padding: 5%;
+}
+.card-title {
+    font-style: bold;
+    text-decoration: underline;
+    font-size: 6cqw;
+}
+
+.card-text{
+    font-style: italic;
+    align-items: center;
+}

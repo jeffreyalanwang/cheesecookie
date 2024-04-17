@@ -256,8 +256,8 @@ def guideEditPage(id):
 def explorePage():
     #  TODO Get the entry for that ID in software database
     courses = random.sample(Course.query.all(),3)
-    languages = Language.query.all()
-    softwares = Software.query.all()
+    languages = random.sample(Language.query.all(),3)
+    softwares = random.sample(Software.query.all(),3)
     #  TODO Render with that info
     return render_template('explore.html', softwares=softwares,languages=languages, courses=courses)
 
