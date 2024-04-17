@@ -1,3 +1,32 @@
+html {
+    background-color: rgb(66,66,66)
+}
+
+.header {
+    background-color: gray;
+    width : 1000px;
+    height : 100;
+    text-align:center;
+    margin: auto;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.icon-text {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 500;
+    font-size: 6cqw;
+    color: rgb(189, 189, 189);
+    line-height: 1;
+
+    align-items: center; 
+    justify-content: center;
+}
+
+.card-group {
+    margin-bottom: 8%;
+}
+
 .card {
     width: 20rem;
     height: 20rem;
@@ -5,7 +34,6 @@
 }
 .card-title {
     font-style: bold;
-    text-decoration: underline;
     font-size: 6cqw;
 }
 
