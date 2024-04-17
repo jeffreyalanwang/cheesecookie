@@ -184,7 +184,11 @@ def courseEditPage(id):
 
     if request.method == 'POST':
         results = request.form
-        # TODO save content in database
+        db_access.setCourse(id,
+                            title=results["title"],
+                            course_code=results["course_code"],
+                            credit_hours=int(results["credit_hours"]),
+                            description=results["description"])
 
     course = db_access.getCourse(id)
     return render_template('database_edit/course_edit.html', course=course,languages=course.compatible_language, softwares=course.compatible_software, requires=course.course_requires)
@@ -199,7 +203,12 @@ def languageEditPage(id):
 
     if request.method == 'POST':
             results = request.form
-            # TODO save content in database
+            db_access.setLanguage(id,
+                                name=results["name"],
+                                site_url=results["site_url"],
+                                download_url=results["download_url"],
+                                documentation_url=results["documentation_url"],
+                                description=results["description"])
 
     language = db_access.getLanguage(id)
     return render_template('database_edit/language_edit.html', language=language,courses=language.compatible_course, softwares=language.compatible_software)
@@ -214,7 +223,12 @@ def softwareEditPage(id):
 
     if request.method == 'POST':
             results = request.form
-            # TODO save content in database
+            db_access.setSoftware(id,
+                                name=results["name"],
+                                site_url=results["site_url"],
+                                download_url=results["download_url"],
+                                documentation_url=results["documentation_url"],
+                                description=results["description"])
 
     software = db_access.getSoftware(id)
     return render_template('database_edit/software_edit.html', software=software,languages=software.compatible_language, courses=software.compatible_course)

@@ -34,7 +34,7 @@
 
             <!-- Title -->
             <input type="text" class="form-control info_title mb-3" id="name"
-                {% if language is not none %} value="{{ language.name }}" {% endif %} 
+                {% if language.name is not none %} value="{{ language.name }}" {% endif %} 
                 placeholder="Language name">
 
             <!-- Info -->
@@ -46,7 +46,7 @@
                     </div>
                     <div class="col-sm-6 info_text"> 
                         <input type="text" class="form-control infoInput" id="site_url"
-                        {% if language is not none %} value="{{ language.site_url }}" {% endif %} 
+                        {% if language.site_url is not none %} value="{{ language.site_url }}" {% endif %} 
                         placeholder="URL">
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                     </div>
                     <div class="col-sm-6 info_text"> 
                         <input type="text" class="form-control infoInput" id="download_url"
-                        {% if language is not none %} value="{{ language.download_url }}" {% endif %}
+                        {% if language.download_url is not none %} value="{{ language.download_url }}" {% endif %}
                         placeholder="URL">
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                     </div>
                     <div class="col-sm-6 info_text"> 
                         <input type="text" class="form-control infoInput" id="documentation_url"
-                        {% if language is not none %} value="{{ language.documentation_url }}" {% endif %}
+                        {% if language.documentation_url is not none %} value="{{ language.documentation_url }}" {% endif %}
                         placeholder="URL">
                     </div>
                 </div>
@@ -76,7 +76,7 @@
             </div>
 
             <!-- Description -->
-            <textarea type="text" class="form-control mt-4" id="description" placeholder="Language description">{% if language is not none %}{{ language.description }}{% endif %}</textarea>
+            <textarea type="text" class="form-control mt-4" id="description" placeholder="Language description">{% if language.description is not none %}{{ language.description }}{% endif %}</textarea>
 
         </div> </div>
 

@@ -34,7 +34,7 @@
 
             <!-- Title -->
             <input type="text" class="form-control info_title mb-3" id="name"
-                {% if software is not none %} value="{{ software.name }}" {% endif %} 
+                {% if software.name is not none %} value="{{ software.name }}" {% endif %} 
                 placeholder="Software name">
 
             <!-- Info -->
@@ -46,7 +46,7 @@
                     </div>
                     <div class="col-sm-6 info_text"> 
                         <input type="text" class="form-control infoInput" id="site_url"
-                        {% if software is not none %} value="{{ software.site_url }}" {% endif %} 
+                        {% if software.site_url is not none %} value="{{ software.site_url }}" {% endif %} 
                         placeholder="URL">
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                     </div>
                     <div class="col-sm-6 info_text"> 
                         <input type="text" class="form-control infoInput" id="download_url"
-                        {% if software is not none %} value="{{ software.download_url }}" {% endif %}
+                        {% if software.download_url is not none %} value="{{ software.download_url }}" {% endif %}
                         placeholder="URL">
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                     </div>
                     <div class="col-sm-6 info_text"> 
                         <input type="text" class="form-control infoInput" id="documentation_url"
-                        {% if software is not none %} value="{{ software.documentation_url }}" {% endif %}
+                        {% if software.documentation_url is not none %} value="{{ software.documentation_url }}" {% endif %}
                         placeholder="URL">
                     </div>
                 </div>
@@ -76,7 +76,7 @@
             </div>
 
             <!-- Description -->
-            <textarea type="text" class="form-control mt-4" id="description" placeholder="Software description">{% if software is not none %}{{ software.description }}{% endif %}</textarea>
+            <textarea type="text" class="form-control mt-4" id="description" placeholder="Software description">{% if software.description is not none %}{{ software.description }}{% endif %}</textarea>
 
         </div> </div>
 

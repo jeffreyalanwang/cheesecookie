@@ -7,7 +7,7 @@ $(document).ready(function($)
             // collect all form responses
             var data = {'submit': true};
 
-            $(':input', 'textarea', 'form').each(function(){
+            $(':input', 'form').each(function(){
                 data[$(this).attr('id')] = $(this).val();
             });
 

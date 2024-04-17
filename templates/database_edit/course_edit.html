@@ -27,7 +27,7 @@
 
             <!-- Title -->
             <input type="text" class="form-control info_title mb-3" id="title"
-                {% if course is not none %} value="{{ course.title }}" {% endif %} 
+                {% if course.title is not none %} value="{{ course.title }}" {% endif %} 
                 placeholder="Course title">
 
             <!-- Info -->
@@ -39,7 +39,7 @@
                     </div>
                     <div class="col-sm-6 info_text"> 
                         <input type="text" class="form-control infoInput" id="course_code"
-                        {% if course is not none %} value="{{ course.course_code }}" {% endif %} 
+                        {% if course.course_code is not none %} value="{{ course.course_code }}" {% endif %} 
                         placeholder="Course code">
                     </div>
                 </div>
@@ -50,7 +50,7 @@
                     </div>
                     <div class="col-sm-6 info_text"> 
                         <input type="text" class="form-control infoInput" id="credit_hours"
-                        {% if course is not none %} value="{{ course.credit_hours }}" {% endif %}
+                        {% if course.credit_hours is not none %} value="{{ course.credit_hours }}" {% endif %}
                         placeholder="Credit hours">
                     </div>
                 </div>
@@ -71,7 +71,7 @@
             </div>
 
             <!-- Description -->
-            <textarea type="text" class="form-control mt-4" id="description" placeholder="Course description">{% if course is not none %}{{ course.description }}{% endif %}</textarea>
+            <textarea type="text" class="form-control mt-4" id="description" placeholder="Course description">{% if course.description is not none %}{{ course.description }}{% endif %}</textarea>
 
         </div> </div>
 
