@@ -16,8 +16,8 @@
     <nav id="sidebar" class="nav d-flex flex-shrink-0 flex-column">
         <a class="nav-link" data-bs-toggle="tooltip" title="Home" href="/"><i class="material-icons">home</i></a>
         <a class="nav-link" data-bs-toggle="tooltip" title="Search" href="/search"><i class="material-icons">search</i></a>
-        <a class="nav-link" data-bs-toggle="tooltip" title="Profile" href="#"><i class="material-icons">person</i></a>
-        <a class="nav-link" data-bs-toggle="tooltip" title="Explore" href="/explore/"><i class="material-icons">public</i></a>
+        <a class="nav-link" data-bs-toggle="tooltip" title="Profile" href="/profile"><i class="material-icons">person</i></a>
+        <a class="nav-link" data-bs-toggle="tooltip" title="Explore" href="/explore"><i class="material-icons">public</i></a>
         <a class="nav-link" data-bs-toggle="tooltip" title="Edit this page" href="{{ url_for( request.endpoint, **request.view_args)}}/edit" id="edit_button"><i class="material-icons">edit</i></a>
         <button type="submit" class="nav-link btn btn-primary" data-bs-toggle="tooltip" title="Save changes" id="save_button"><i class="material-icons">save</i></button>
         <a class="nav-link" data-bs-toggle="tooltip" title="Back to viewing" href="{{ "/".join(url_for( request.endpoint, **request.view_args).split("/")[:-1]) }}" id="back_button"><i class="material-icons">arrow_back</i></a>
