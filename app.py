@@ -109,8 +109,8 @@ def contentListPage():
 @app.route('/explore/', methods=['GET'])
 def explorePage():
     courses = random.sample(db_access.allCourses(),3)
-    languages = db_access.allLanguages()
-    softwares = db_access.allSoftwares()
+    languages = random.sample(db_access.allLanguages(),3)
+    softwares = random.sample(db_access.allSoftwares(),3)
     return render_template('explore.html', softwares=softwares,languages=languages, courses=courses)
 
 @app.route('/search', methods=['POST','GET'])
