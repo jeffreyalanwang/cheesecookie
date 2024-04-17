@@ -1,0 +1,33 @@
+<!--
+    Mary Johnson
+    Matthew Shimko
+    Jeffery Wang
+
+    Written by Mary Johnson
+-->
+
+{% extends 'base.html' %}
+
+{% block head %}
+<title>{{ guide.title }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/database_page.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="jumbotron p-5">
+
+    <div id="title-div">
+        <h1 style="display: inline;">
+            {{ guide.title }}
+        </h1>
+    </div>
+
+    <hr>
+
+    <!-- content is already in HTML format -->
+    {{ guide.content }}
+
+</div>
+
+{% endblock %}

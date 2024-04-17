@@ -1,0 +1,22 @@
+.fsize {
+    text-decoration: none;
+    color: inherit;
+}
+
+hr {
+    display: none;
+}
+
+.jumbotron {
+    background-color: inherit;
+}
+
+.btn-group {
+    background-color: white;
+    border: solid whitesmoke;
+    margin: 2;
+}
+
+.dropdown-menu {
+    border: solid rgb(223, 223, 223);
+}

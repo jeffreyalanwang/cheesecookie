@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>Edit: {{ software.name }}</title>
+<title>Edit: {% if guide %}{{ guide.title }}{% else %}New guide{% endif %} </title>
 <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-wysiwyg/css/style.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/editor.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/database_edit_page.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/wysiwyg_editor.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/guide_edit.css') }}">
 <link href="http://netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet" />
 {% endblock %}
 
@@ -12,27 +14,34 @@
 <!-- Add edit fields based on the fields of software.html -->
 
 <!-- WYSIWYG editor -->
-<div class="jumbotron">
-    <h1>
-        Edit: {{ software.name }}
-    </h1>
+<div class="jumbotron p-5">
 
-    <hr>
+    <div id="title-div">
+        <h1 style="display: inline;">
+            Edit:
+        </h1>
+
+        <input type="text" class="form-control info_title mb-3" id="title" style="display:inline;"
+            {% if guide is not none %} value="{{ guide.title }}" {% endif %} 
+            placeholder="Title">
+
+        <hr>
+    </div>
 
     <div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
         <div class="btn-group">
-            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+            <a class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown"
                 title="Font"><i class="fa fa-font"></i><b class="caret"></b>
             </a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu p-1">
             </ul>
         </div>
         <div class="btn-group">
-            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+            <a class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown"
                 title="Font Size"><i class="fa fa-text-height"></i>&nbsp;<b
                 class="caret"></b>
             </a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu p-1">
                 <li><a data-edit="fontSize 5" class="fsize fs-Five">Huge</a></li>
                 <li><a data-edit="fontSize 3" class="fsize fs-Three">Normal</a></li>
                 <li><a data-edit="fontSize 1" class="fsize fs-One">Small</a></li>
@@ -57,8 +66,8 @@
             <a class="btn btn-default" data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)"><i class="fa fa-align-justify"></i></a>
         </div>
         <div class="btn-group">
-            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="Hyperlink"><i class="fa fa-link"></i></a>
-            <div class="dropdown-menu input-append">
+            <a class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" title="Hyperlink"><i class="fa fa-link"></i></a>
+            <div class="dropdown-menu input-append p-1">
                 <input placeholder="URL" type="text" data-edit="createLink" />
                 <button class="btn" type="button">Add</button>
             </div>
@@ -74,7 +83,8 @@
             <a class="btn btn-default" data-edit="redo" title="Redo (Ctrl/Cmd+Y)"><i class="fa fa-repeat"></i></a>
         </div>
     </div>
-    <div id="editor" class="lead" data-placeholder="Begin typing..."></div>
+
+    <div id="editor" class="lead p-3 mb-3" data-placeholder="Begin typing..."></div>
 
     <hr style="opacity: 0;">
 
@@ -140,8 +150,8 @@
 
 			$('#editor').wysiwyg({ fileUploadError: showErrorAlert} );
 
-            {% if content %}
-                $('#editor').html( {{ content }} );
+            {% if guide %}
+                $('#editor').html( {{ guide.content }} );
             {% endif %}
 
             $('#saveBtn').on('click', function(){
