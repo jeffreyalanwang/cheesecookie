@@ -76,9 +76,7 @@
             </div>
 
             <!-- Description -->
-            <input type="text" class="form-control mt-4" id="description"
-                {% if software is not none %} value="{{ software.description }}" {% endif %} 
-                placeholder="Software description">
+            <textarea type="text" class="form-control mt-4" id="description" placeholder="Software description">{% if software is not none %}{{ software.description }}{% endif %}</textarea>
 
         </div> </div>
 

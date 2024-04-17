@@ -76,9 +76,7 @@
             </div>
 
             <!-- Description -->
-            <input type="text" class="form-control mt-4" id="description"
-                {% if language is not none %} value="{{ language.description }}" {% endif %} 
-                placeholder="Language description">
+            <textarea type="text" class="form-control mt-4" id="description" placeholder="Language description">{% if language is not none %}{{ language.description }}{% endif %}</textarea>
 
         </div> </div>
 

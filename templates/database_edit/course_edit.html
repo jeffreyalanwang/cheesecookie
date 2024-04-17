@@ -71,9 +71,7 @@
             </div>
 
             <!-- Description -->
-            <input type="text" class="form-control mt-4" id="description"
-                {% if course is not none %} value="{{ course.description }}" {% endif %} 
-                placeholder="Course description">
+            <textarea type="text" class="form-control mt-4" id="description" placeholder="Course description">{% if course is not none %}{{ course.description }}{% endif %}</textarea>
 
         </div> </div>
 
