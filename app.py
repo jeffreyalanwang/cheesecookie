@@ -8,6 +8,7 @@ Written by Mary Johnson
 
 from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
+from database_wrapper import DBAccess
 import random
 
 '''
@@ -47,14 +48,12 @@ LanguageSoftware = db.Table(
     db.PrimaryKeyConstraint('language_id', 'software_id')
 )
 
-
 CourseRequiresCourse = db.Table(
     "CourseRequiresCourse",
     db.Column("course_id", db.ForeignKey('course.id')),
     db.Column("required_course_id", db.ForeignKey('course.id')),
     db.PrimaryKeyConstraint('course_id', 'required_course_id')
 )
-
 
 class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -65,7 +64,6 @@ class Course(db.Model):
 
     compatible_language = db.relationship('Language', secondary=CourseLanguage, backref='compatible_course')
     compatible_software = db.relationship('Software', secondary=CourseSoftware, backref='compatible_course')
-    
     course_requires = db.relationship('Course', secondary=CourseRequiresCourse, primaryjoin=(CourseRequiresCourse.c.course_id == id), secondaryjoin=(CourseRequiresCourse.c.required_course_id == id), backref='prerequisite_of')
 
     def __repr__(self):
@@ -95,9 +93,8 @@ class Software(db.Model):
     def __repr__(self):
         return '<Software: %r>' % self.name
 
-
-
-
+# Access database through wrapper class
+db_access = DBAccess(db, Course, Language, Software)
 
 # Defines actions with homepage, requesting the page
 @app.route('/', methods=['GET'])
@@ -105,13 +102,24 @@ def index():
     # Display the index page.
     return render_template('index.html')
 
+@app.route('/my_content/', methods=['GET'])
+def contentListPage():
+    return render_template('explore.html', softwares=softwares,languages=languages, courses=courses)
+
+@app.route('/explore/', methods=['GET'])
+def explorePage():
+    courses = random.sample(db_access.allCourses(),3)
+    languages = db_access.allLanguages()
+    softwares = db_access.allSoftwares()
+    return render_template('explore.html', softwares=softwares,languages=languages, courses=courses)
+
 @app.route('/search', methods=['POST','GET'])
 def search():
 
     # Used to dynamically list courses/languages/software
-    all_course = Course.query.order_by(Course.id).all()
-    all_language = Language.query.order_by(Language.id).all()
-    all_software = Software.query.order_by(Software.id).all()
+    all_course = db_access.allCourses(Course.id)
+    all_language = db_access.allLanguages(Language.id)
+    all_software = db_access.allSoftwares(Software.id)
 
     if request.method == 'POST':       
         # TODO gather categories/search terms/narrowing factors/
@@ -126,7 +134,6 @@ def search():
         compatibleSoftware = request.form.get('compatible_software',False)
         compatibleCourse = request.form.get('compatible_course',False)
 
-        
         prerequisiteCourse = request.form.get('prerequisite_course',False)
         requiresCourse = request.form.get('requires_course',False)
         
@@ -135,63 +142,27 @@ def search():
         
         # If course
         if searchCourse:
-            courses = Course.query
-
-            if int(prerequisiteCourse) > 0:
-                prereq = Course.query.filter_by(id=prerequisiteCourse).first()
-                courses = courses.filter(Course.prerequisite_of.contains(prereq))
-
-            if int(requiresCourse) > 0:
-                required = Course.query.filter_by(id=requiresCourse).all()
-                coursesQ = Course.query.filter_by(id=0)
-                for req in required:
-                    coursesQ = coursesQ.union(courses.filter(Course.course_requires.contains(req)))
-                courses = courses.intersect(coursesQ)
-
-
-            if int(creditHours) > 0:
-                courses = courses.filter_by(credit_hours=creditHours)
-            
-            if int(compatibleLanguage) > 0:
-                courses = courses.join(Course.compatible_language).filter(Language.id==compatibleLanguage)
-
-            if int(compatibleSoftware) > 0:
-                courses = courses.join(Course.compatible_software).filter(Software.id==compatibleSoftware)
-            
-        
-
-            courses = courses.order_by(Course.id).all()
+            courses = db_access.searchCourses(prerequisiteCourse=prerequisiteCourse,
+                                    requiresCourse=requiresCourse,
+                                    creditHours=creditHours,
+                                    compatibleLanguage=compatibleLanguage,
+                                    compatibleSoftware=compatibleSoftware)
         else: 
             courses = [] 
 
         # If lang
         if searchLanguage:
-            languages = Language.query
-
-            if int(compatibleCourse) > 0:
-                languages = languages.join(Language.compatible_course).filter(Course.id==compatibleCourse)
-
-            if int(compatibleSoftware) > 0:
-                languages = languages.join(Language.compatible_software).filter(Software.id==compatibleSoftware)
-
-            languages = languages.order_by(Language.id).all()
+            languages = db_access.searchLanguages(compatibleCourse=compatibleCourse,
+                                                  compatibleSoftware=compatibleSoftware)
         else: 
             languages = []
 
         # If software
         if searchSoftware:
-            softwares = Software.query
-
-            if int(compatibleCourse) > 0:
-                softwares = softwares.join(Course.compatible_software).filter(Software.id==compatibleSoftware)
-
-            if int(compatibleLanguage) > 0:
-                softwares = softwares.join(Language.compatible_course).filter(Course.id==compatibleCourse)
-
-            softwares = softwares.order_by(Software.id).all()
+            softwares = db_access.searchSoftwares(compatibleCourse=compatibleCourse,
+                                                  compatibleLanguage=compatibleLanguage)
         else: 
             softwares = []
-
 
         try:
             return render_template('search.html', all_course=all_course, all_language=all_language, all_software=all_software, courses=courses, languages=languages, softwares=softwares) #  TODO Add a # to direct to top of results
@@ -201,11 +172,12 @@ def search():
     else:
         return render_template('search.html', all_course=all_course, all_language=all_language, all_software=all_software)
 
+# Database pages
 
 @app.route('/course/<int:id>', methods=['GET'])
 def coursePage(id):
-    course = Course.query.get_or_404(id)
-    return render_template('database/course.html', course=course,languages=course.compatible_language, softwares=course.compatible_software, requires=course.course_requires)
+    course = db_access.getCourse(id)
+    return render_template('database/course.html', course=course, languages=course.compatible_language, softwares=course.compatible_software, requires=course.course_requires)
 
 @app.route('/course/<int:id>/edit', methods=['POST', 'GET'])
 def courseEditPage(id):
@@ -214,12 +186,12 @@ def courseEditPage(id):
         results = request.form
         # TODO save content in database
 
-    course = Course.query.get_or_404(id)
+    course = db_access.getCourse(id)
     return render_template('database_edit/course_edit.html', course=course,languages=course.compatible_language, softwares=course.compatible_software, requires=course.course_requires)
 
 @app.route('/language/<int:id>', methods=['GET'])
 def languagePage(id):
-    language = Language.query.get_or_404(id)
+    language = db_access.getLanguage(id)
     return render_template('database/language.html', language=language,courses=language.compatible_course, softwares=language.compatible_software)
     
 @app.route('/language/<int:id>/edit', methods=['POST', 'GET'])
@@ -229,12 +201,12 @@ def languageEditPage(id):
             results = request.form
             # TODO save content in database
 
-    language = Language.query.get_or_404(id)
+    language = db_access.getLanguage(id)
     return render_template('database_edit/language_edit.html', language=language,courses=language.compatible_course, softwares=language.compatible_software)
 
 @app.route('/software/<int:id>', methods=['GET'])
 def softwarePage(id):
-    software = Software.query.get_or_404(id)
+    software = db_access.getSoftware(id)
     return render_template('database/software.html', software=software,languages=software.compatible_language, courses=software.compatible_course)
 
 @app.route('/software/<int:id>/edit', methods=['POST', 'GET'])
@@ -244,26 +216,32 @@ def softwareEditPage(id):
             results = request.form
             # TODO save content in database
 
-    software = Software.query.get_or_404(id)
+    software = db_access.getSoftware(id)
     return render_template('database_edit/software_edit.html', software=software,languages=software.compatible_language, courses=software.compatible_course)
 
-@app.route('/guide/<int:id>/edit', methods=['GET'])
-def guideEditPage(id):
+# e.g. /software/1/guide/1
+# type can be language or software.
+# to simplify, we can change the guide feature to only work for software.
+@app.route('/<path:type>/<int:id>/guide/<int:guide_id>', methods=['GET'])
+def guidePage(type, id, guide_id):
     # TODO setup this part of database
-    return render_template('database_edit/guide_edit.html')
+    if type == "software":
+        guide = Software.query.get_or_404(id) # change to get correct guide instead of software itself
+    if type == "language":
+        guide = Language.query.get_or_404(id) # change to get correct guide instead of software itself
 
-@app.route('/explore/', methods=['GET'])
-def explorePage():
-    #  TODO Get the entry for that ID in software database
-    courses = random.sample(Course.query.all(),3)
-    languages = Language.query.all()
-    softwares = Software.query.all()
-    #  TODO Render with that info
-    return render_template('explore.html', softwares=softwares,languages=languages, courses=courses)
+    return render_template('database/guide.html', guide=guide)
 
-@app.route('/my_content/', methods=['GET'])
-def contentListPage():
-    return render_template('explore.html', softwares=softwares,languages=languages, courses=courses)
+@app.route('/<path:type>/<int:id>/guide/<int:guide_id>/edit', methods=['POST', 'GET'])
+def guideEditPage(type, id, guide_id):
+    # TODO setup this part of database
+    guide = None
+
+    if request.method == 'POST':
+            results = request.form
+            # TODO save content in database
+
+    return render_template('database_edit/guide_edit.html', guide=guide)
 
 # Run in debug mode so errors get displayed
 if __name__ == "__main__":
