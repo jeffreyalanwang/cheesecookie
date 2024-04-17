@@ -125,6 +125,7 @@
         <input type="submit" value="Search">
     
     </form>
+    <div class="results">
     <div id="results"></div>
     {% if err %}
         <div>{{ err }}</div>
@@ -132,6 +133,9 @@
 
     {% if courses|length < 1 %}
     {% else %}
+    <p>
+        Results:
+    </p>
         {% for course in courses %}
             <div>
                 <img src="">
@@ -142,8 +146,11 @@
     
     {% if languages|length < 1 %}
     {% else %}
+        <p>
+            Results:
+        </p>
         {% for language in languages %}
-            <div>
+        <div>
                 <img src="">
                 <a href="/language/{{ language.id }}">{{ language.name }}</a>
             </div>
@@ -152,6 +159,9 @@
 
     {% if softwares|length < 1 %}
     {% else %}
+        <p>
+            Results:
+        </p>
         {% for software in softwares %} 
             <div>
                 <img src="">
@@ -160,7 +170,7 @@
         {% endfor %}
     {% endif %}
     
-    
 
+</div>
 </div>
 {% endblock %}
