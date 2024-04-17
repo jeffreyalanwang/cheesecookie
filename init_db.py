@@ -5,7 +5,7 @@ from database_wrapper import DBAccess
 db.drop_all()
 db.create_all()
 
-db_access = DBAccess(db)
+db_access = DBAccess(db, app.Course, app.Language, app.Software)
 
 db_access.addCourse(title='Introduction to Computer Systems', course_code='ITSC 2181', credit_hours='4', description='Introduction to computer system abstractions reflected in programming languages, operating systems, architectures, and networks.')
 db_access.addCourse(title='Data Structures and Algorithms', course_code='ITSC 2214', credit_hours='3', description='A study of the theory and implementation of abstract data types (ADTs) including stacks, queues, and both general purpose and specialized trees and graphs.')
