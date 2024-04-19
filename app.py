@@ -106,7 +106,7 @@ def index():
 def contentListPage():
     return render_template('explore.html', softwares=softwares,languages=languages, courses=courses)
 
-@app.route('/explore', methods=['GET'])
+@app.route('/explore/', methods=['GET'])
 def explorePage():
     courses = random.sample(db_access.allCourses(),3)
     languages = random.sample(db_access.allLanguages(),3)

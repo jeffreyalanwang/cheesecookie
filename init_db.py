@@ -1,11 +1,11 @@
 from app import db
-from app import *
+from app import Course, Language, Software
 from database_wrapper import DBAccess
 
 db.drop_all()
 db.create_all()
 
-db_access = DBAccess(db, app.Course, app.Language, app.Software)
+db_access = DBAccess(db, Course, Language, Software)
 
 db_access.addCourse(title='Introduction to Computer Systems', course_code='ITSC 2181', credit_hours='4', description='Introduction to computer system abstractions reflected in programming languages, operating systems, architectures, and networks.')
 db_access.addCourse(title='Data Structures and Algorithms', course_code='ITSC 2214', credit_hours='3', description='A study of the theory and implementation of abstract data types (ADTs) including stacks, queues, and both general purpose and specialized trees and graphs.')
@@ -45,6 +45,8 @@ db_access.addSoftware(name='Game Maker Studio 2', site_url='https://gamemaker.io
 db_access.addSoftware(name='MySQL Workbench', site_url='https://www.mysql.com/products/workbench/', download_url='https://dev.mysql.com/downloads/workbench/', documentation_url='https://dev.mysql.com/doc/workbench/en/', description='MySQL Workbench is a unified visual tool for database architects, developers, and DBAs. MySQL Workbench provides data modeling, SQL development, and comprehensive administration tools for server configuration, user administration, backup, and much more. MySQL Workbench is available on Windows, Linux and Mac OS X.')
 db_access.addSoftware(name='Unity', site_url='https://unity.com/', download_url='https://unity.com/pricing', documentation_url='https://docs.unity.com/', description='Unity’s real-time 3D development engine lets artists, designers, and developers collaborate to create amazing immersive and interactive experiences. You can work on Windows, Mac, and Linux.')
 
+
+
 db_access.addCourseLanguage(1, 2)
 db_access.addCourseLanguage(3, 1)
 
@@ -65,3 +67,4 @@ db_access.addCoursePrerequisite(5, 4)
 db_access.addCoursePrerequisite(2, 5)
 db_access.addCoursePrerequisite(11, 5)
 db_access.addCoursePrerequisite(12, 5)
+
