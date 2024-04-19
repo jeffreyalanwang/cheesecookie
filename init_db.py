@@ -45,8 +45,6 @@ db_access.addSoftware(name='Game Maker Studio 2', site_url='https://gamemaker.io
 db_access.addSoftware(name='MySQL Workbench', site_url='https://www.mysql.com/products/workbench/', download_url='https://dev.mysql.com/downloads/workbench/', documentation_url='https://dev.mysql.com/doc/workbench/en/', description='MySQL Workbench is a unified visual tool for database architects, developers, and DBAs. MySQL Workbench provides data modeling, SQL development, and comprehensive administration tools for server configuration, user administration, backup, and much more. MySQL Workbench is available on Windows, Linux and Mac OS X.')
 db_access.addSoftware(name='Unity', site_url='https://unity.com/', download_url='https://unity.com/pricing', documentation_url='https://docs.unity.com/', description='Unity’s real-time 3D development engine lets artists, designers, and developers collaborate to create amazing immersive and interactive experiences. You can work on Windows, Mac, and Linux.')
 
-
-
 db_access.addCourseLanguage(1, 2)
 db_access.addCourseLanguage(3, 1)
 
@@ -57,7 +55,7 @@ db_access.addLanguageSoftware(1, 1)
 
 db_access.addCoursePrerequisite(9, 1)
 
-db_access.addCoursePrerequisite(9, 1)
+db_access.addCoursePrerequisite(9, 2)
 db_access.addCoursePrerequisite(3, 2)
 
 db_access.addCoursePrerequisite(8, 4)
@@ -67,4 +65,3 @@ db_access.addCoursePrerequisite(5, 4)
 db_access.addCoursePrerequisite(2, 5)
 db_access.addCoursePrerequisite(11, 5)
 db_access.addCoursePrerequisite(12, 5)
-
