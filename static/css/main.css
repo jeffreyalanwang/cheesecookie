@@ -30,6 +30,9 @@ body {
     float: right;
     right: 0;
 }
+nav:first-child {
+    padding-top: 1rem;
+}
 .nav-link {
     padding-left: 0;
     padding-right: 0;
@@ -42,10 +45,6 @@ body {
 }
 .nav-link:hover {
     color: #8d8d8d;
-}
-
-.nav-link[data-bs-original-title='Home'] {
-    padding-top: 1rem;
 }
 
 #content {
