@@ -34,11 +34,7 @@ CourseSoftware = db.Table(
     "CourseSoftware",
     db.Column("course_id", db.Integer, db.ForeignKey('course.id')),
     db.Column("software_id", db.Integer, db.ForeignKey('software.id')),
-    # I don't have time to figure out how to make this work. Next Sprint
-    # db.Column("section_num", db.String(200)),
-    # db.Column("installation_url", db.String(200)),
-    # db.Column("installation_text", db.String(200)),
-    db.PrimaryKeyConstraint('course_id', 'software_id') #, 'section_num')
+    db.PrimaryKeyConstraint('course_id', 'software_id')
 ) 
 
 LanguageSoftware = db.Table(
@@ -137,34 +133,34 @@ def search():
         prerequisiteCourse = request.form.get('prerequisite_course',False)
         requiresCourse = request.form.get('requires_course',False)
         
-
-        # TODO perform the SQL queries to get the results list
-        
-        # If course
-        if searchCourse:
-            courses = db_access.searchCourses(prerequisiteCourse=prerequisiteCourse,
-                                    requiresCourse=requiresCourse,
-                                    creditHours=creditHours,
-                                    compatibleLanguage=compatibleLanguage,
-                                    compatibleSoftware=compatibleSoftware)
-        else: 
-            courses = [] 
-
-        # If lang
-        if searchLanguage:
-            languages = db_access.searchLanguages(compatibleCourse=compatibleCourse,
-                                                  compatibleSoftware=compatibleSoftware)
-        else: 
-            languages = []
-
-        # If software
-        if searchSoftware:
-            softwares = db_access.searchSoftwares(compatibleCourse=compatibleCourse,
-                                                  compatibleLanguage=compatibleLanguage)
-        else: 
-            softwares = []
-
         try:
+            # TODO perform the SQL queries to get the results list
+            
+            # If course
+            if searchCourse:
+                courses = db_access.searchCourses(prerequisiteCourse=prerequisiteCourse,
+                                        requiresCourse=requiresCourse,
+                                        creditHours=creditHours,
+                                        compatibleLanguage=compatibleLanguage,
+                                        compatibleSoftware=compatibleSoftware)
+            else: 
+                courses = [] 
+
+            # If lang
+            if searchLanguage:
+                languages = db_access.searchLanguages(compatibleCourse=compatibleCourse,
+                                                    compatibleSoftware=compatibleSoftware)
+            else: 
+                languages = []
+
+            # If software
+            if searchSoftware:
+                softwares = db_access.searchSoftwares(compatibleCourse=compatibleCourse,
+                                                    compatibleLanguage=compatibleLanguage)
+            else: 
+                softwares = []
+
+        
             return render_template('search.html', all_course=all_course, all_language=all_language, all_software=all_software, courses=courses, languages=languages, softwares=softwares) #  TODO Add a # to direct to top of results
         except:
             return render_template('search.html', all_course=all_course, all_language=all_language, all_software=all_software, err="There was an error with completing your search.")
