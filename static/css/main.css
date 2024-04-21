@@ -30,13 +30,22 @@ body {
     float: right;
     right: 0;
 }
-.nav-link,
-.navbar-brand {
+.nav-link {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+.nav-link, .navbar-brand {
     color: #fff;
     cursor: pointer;
 }
 .nav-link:hover {
     color: #8d8d8d;
+}
+
+.nav-link[data-bs-original-title='Home'] {
+    padding-top: 1rem;
 }
 
 #content {
