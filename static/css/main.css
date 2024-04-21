@@ -30,13 +30,21 @@ body {
     float: right;
     right: 0;
 }
-.nav-link,
-.navbar-brand {
+.nav-link {
+    padding-left: calc((var(--nav-width) - 24px) / 2);
+    padding-right: calc((var(--nav-width) - 24px) / 2);
+    margin-left: auto;
+    margin-right: auto;
+}
+.nav-link, .navbar-brand {
     color: #fff;
     cursor: pointer;
 }
 .nav-link:hover {
     color: #8d8d8d;
+}
+.nav-link:first-child {
+    padding-top: 1rem;
 }
 
 #content {

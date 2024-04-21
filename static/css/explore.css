@@ -23,8 +23,12 @@ html {
     justify-content: center;
 }
 
+.card-name-combo {
+    margin-bottom: 2%;
+}
+
 .card-group {
-    margin-bottom: 8%;
+    margin-bottom: 5%;
 }
 
 .card {
