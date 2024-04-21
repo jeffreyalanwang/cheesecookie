@@ -6,9 +6,20 @@ Jeffery Wang
 Written by Mary Johnson
 '''
 
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, send_from_directory
+
+# database
 from flask_sqlalchemy import SQLAlchemy
 from database_wrapper import DBAccess
+
+# for file uploads
+from glob import glob
+import os
+from pathlib import Path
+from werkzeug.utils import secure_filename
+from werkzeug.security import safe_join
+
+# sampling
 import random
 
 '''
@@ -18,6 +29,7 @@ python init_db.py
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///array.db'
+app.config['UPLOAD_FOLDER'] = 'instance'
 db = SQLAlchemy(app)
 
 # Rules for database. Defining Columns.
@@ -172,6 +184,34 @@ def search():
     else:
         return render_template('search.html', all_course=all_course, all_language=all_language, all_software=all_software)
 
+# Helper for database pages: get image
+@app.route('/img/<path:folder>/<int:id>', methods=['GET'])
+def img(folder, id=-1):
+    folder_path = app.config['UPLOAD_FOLDER'] + '/img/' + folder + '/' + str(id) + '/'
+
+    try:
+        file_name = os.listdir(folder_path)[0]
+    except (FileNotFoundError, IndexError):
+        folder_path = app.config['UPLOAD_FOLDER'] + '/img/' + folder + '/placeholder/'
+        file_name = os.listdir(folder_path)[0]
+    
+    return send_from_directory(folder_path, file_name)
+
+def imgSave(folder, id, file, filename=None):
+    if filename is None:
+        filename = secure_filename(file.filename)
+    
+    folder_path = app.config['UPLOAD_FOLDER'] + '/img/' + folder + '/' + str(id) + '/'
+
+    # create folder if needed
+    Path(folder_path).mkdir(exist_ok=True)
+    # delete existing image
+    files = glob(folder_path + "*")
+    for f in files:
+        os.remove(f)
+    # save image
+    file.save(safe_join(folder_path, filename))
+
 # Database pages
 
 @app.route('/course/<int:id>', methods=['GET'])
@@ -196,42 +236,52 @@ def courseEditPage(id):
 @app.route('/language/<int:id>', methods=['GET'])
 def languagePage(id):
     language = db_access.getLanguage(id)
-    return render_template('database/language.html', language=language,courses=language.compatible_course, softwares=language.compatible_software)
+    return render_template('database/language.html', id=id, language=language,courses=language.compatible_course, softwares=language.compatible_software)
     
 @app.route('/language/<int:id>/edit', methods=['POST', 'GET'])
 def languageEditPage(id):
 
     if request.method == 'POST':
-            results = request.form
-            db_access.setLanguage(id,
-                                name=results["name"],
-                                site_url=results["site_url"],
-                                download_url=results["download_url"],
-                                documentation_url=results["documentation_url"],
-                                description=results["description"])
+        results = request.form
+        files = request.files
+        db_access.setLanguage(id,
+                            name=results["name"],
+                            site_url=results["site_url"],
+                            download_url=results["download_url"],
+                            documentation_url=results["documentation_url"],
+                            description=results["description"])
+        if 'image' in files:
+            imgFile = files['image']
+            if imgFile.filename:
+                imgSave('language', id, imgFile)
 
     language = db_access.getLanguage(id)
-    return render_template('database_edit/language_edit.html', language=language,courses=language.compatible_course, softwares=language.compatible_software)
+    return render_template('database_edit/language_edit.html', id=id, language=language,courses=language.compatible_course, softwares=language.compatible_software)
 
 @app.route('/software/<int:id>', methods=['GET'])
 def softwarePage(id):
     software = db_access.getSoftware(id)
-    return render_template('database/software.html', software=software,languages=software.compatible_language, courses=software.compatible_course)
+    return render_template('database/software.html', software=software, id=id, languages=software.compatible_language, courses=software.compatible_course)
 
 @app.route('/software/<int:id>/edit', methods=['POST', 'GET'])
 def softwareEditPage(id):
 
     if request.method == 'POST':
-            results = request.form
-            db_access.setSoftware(id,
-                                name=results["name"],
-                                site_url=results["site_url"],
-                                download_url=results["download_url"],
-                                documentation_url=results["documentation_url"],
-                                description=results["description"])
+        results = request.form
+        files = request.files
+        db_access.setSoftware(id,
+                            name=results["name"],
+                            site_url=results["site_url"],
+                            download_url=results["download_url"],
+                            documentation_url=results["documentation_url"],
+                            description=results["description"])
+        if 'image' in files:
+            imgFile = files['image']
+            if imgFile.filename:
+                imgSave('software', id, imgFile)
 
     software = db_access.getSoftware(id)
-    return render_template('database_edit/software_edit.html', software=software,languages=software.compatible_language, courses=software.compatible_course)
+    return render_template('database_edit/software_edit.html', id=id, software=software,languages=software.compatible_language, courses=software.compatible_course)
 
 # e.g. /software/1/guide/1
 # type can be language or software.

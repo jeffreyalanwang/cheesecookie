@@ -40,6 +40,39 @@ form {
     transition-property: border-bottom;
 }
 
+#icon_form {
+    background: rgba(0, 0, 0, 0);
+    align-items: center;
+}
+
+#icon_form * {
+    display: none;
+    position: absolute;
+}
+
+#icon_form:hover {
+    background: rgba(0, 0, 0, .5);
+    backdrop-filter: blur(.5cqw);
+}
+
+#icon_form:hover * {
+    display: initial;
+}
+
+#icon_form input {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 5;
+    cursor: pointer;
+}
+
+#icon_form i {
+    z-index:4;
+    color: whitesmoke;
+    font-size: 12cqw;
+}
+
 #details .info_title {
     font-size: xx-large;
     font-weight: bold;

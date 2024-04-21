@@ -25,7 +25,11 @@
         <!-- Icon or course code -->
         <div class="col-xl-4"> <div class="ratio ratio-1x1">
             <div id="icon">
-                <h class="icon-text">icon placeholder</h>
+                <img id="icon_img" alt="" src="{{ url_for('img', folder='language', id=id) }}">
+            </div>
+            <div id="icon_form" class="position-absolute d-flex justify-content-center">
+                <i class="material-icons">publish</i>
+                <input id="image" type="file" accept="image/*">
             </div>
         </div> </div>
 
@@ -107,6 +111,8 @@
 {% endblock %}
 
 {% block scripts %}
+<!-- Auto-updating icon based on user upload -->
+<script src="{{ url_for('static', filename='js/database_form_icon.js') }}"></script>
 <!-- Will submit POST data with an entry for each form element ID -->
 <script src="{{ url_for('static', filename='js/form_submit.js') }}"></script>
 {% endblock %}
