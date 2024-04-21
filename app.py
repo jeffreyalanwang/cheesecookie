@@ -102,9 +102,13 @@ def index():
     # Display the index page.
     return render_template('index.html')
 
-@app.route('/my_content', methods=['GET'])
+@app.route('/profile', methods=['GET'])
 def contentListPage():
-    return render_template('explore.html', softwares=softwares,languages=languages, courses=courses)
+    # TODO support for individual users
+    courses = db_access.allCourses()
+    languages = db_access.allLanguages()
+    softwares = db_access.allSoftwares()
+    return render_template('my_content.html', softwares=softwares,languages=languages, courses=courses)
 
 @app.route('/explore/', methods=['GET'])
 def explorePage():

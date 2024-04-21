@@ -1,0 +1,133 @@
+<!--
+    Mary Johnson
+    Mathew Shimko
+    Jeffery Wang
+
+    Written by Mathew Shimko
+-->
+<!-- This is exact same as explore.html, but with all instances of "recommended" replaced by "my"
+    Can be more functional once user functionality is implemented -->
+{% extends 'base.html' %}
+
+{% block head %}
+<title>My Content</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/explore.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<!--
+    Explore My "Classes"
+-->
+<div class="header p-5">
+    <h1>My Courses</h1>
+</div>
+
+<div class="card-group"> 
+    {% if courses|length > 0  %}
+        {% for course in courses %}
+        
+        <div class="card-name-combo col-md-4 d-flex justify-content-center"> 
+            <a href="/course/{{ course.id }}" style="text-decoration: none;"> 
+                <div class="card border-40 rounded-0">
+                    <div class="card-body">
+                        
+                        <div style="width:100%; height:100%;">
+                            <div style="text-align:center; width:100%; height: 100%; display:flex; flex-wrap: wrap; justify-content: center; align-items: center;">
+                                {% for line in course.course_code.split() %}
+                                <h class="icon-text">{{ line }}</h>
+                                <br>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div> 
+                <p class="card-text" style="color: rgb(229, 228, 228); width:20rem; text-align:center; overflow-wrap: break-word;">
+                    {{course.title}}
+                </p>
+            </a> 
+        </div>
+        <!--
+        <div class="col-md-4 d-flex justify-content-center"> <a href="/explore"> <div class="card border-0 rounded-0"></div>
+            <a href="/course/{{ course.id }}">
+                <div class="card w-20 border-50 rounded-0">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <option recVal ="{{ course.id }}">{{course.course_code}}</option>
+                        </h5>
+                    </div>
+                </div>
+            </a>
+            -->
+        {% endfor %}
+    {% endif %}     
+</div>
+<!--
+    Explore My "Software"
+-->
+<div class="header p-5">
+    <h1>My Software</h1>
+</div>
+
+<div class="card-group"> 
+{% if softwares|length > 0  %}
+    {% for software in softwares %}
+    <div class="card-name-combo col-md-4 d-flex justify-content-center">   
+        <a href="/software/{{ software.id }}"> 
+            <div class="card border-0 rounded-0">
+                <div class="card-body">
+                    <p class="card-text">
+                        <br><br>
+                        <div style="font-size:x-large">
+                        <option recVal = "{{ software.id }}"> <br>{{software.name}}</option>
+                        </div>
+                    </p>
+                </div>
+            </div>
+        </a> 
+    </div>
+    <!--
+    <div class="col-md-4 d-flex justify-content-center"> <a href="/explore"> <div class="card border-0 rounded-0"></div>
+    <div> 
+            <a href="/software/{{ software.id }}">
+            <div class="card w-20 border-50 rounded-0">
+            <div class="card-body">
+                <h7 class="card-title">
+                    <option recVal ="{{ software.id }}"> {{ software.name }}</option>
+            </h7>
+            </div></a>
+
+        </div>
+    -->
+    {% endfor %}
+{% endif %}  
+</div>   
+<!--
+    Explore My "Languages"
+-->
+<div class="header p-5">
+    <h1>My Languages</h1>
+</div>
+
+<div class="card-group"> 
+{% if languages|length > 0  %}
+    {% for language in languages %}
+    <div class="card-name-combo col-md-4 d-flex justify-content-center">
+            <a href="/language/{{ language.id }}">
+                <div class="card border-0 rounded-0">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <div style="font-size: 4cqw;">
+                            <br>
+                            <option recVal = "{{ language.id }}"> <br>{{language.name}}</option>
+                        </div>
+                    </h5>
+                </div>
+            </div> 
+        </a> 
+    </div>
+    {% endfor %}
+{% endif %} 
+</div>
+{% endblock %}
