@@ -172,6 +172,12 @@ def search():
     else:
         return render_template('search.html', all_course=all_course, all_language=all_language, all_software=all_software)
 
+
+@app.route('/about', methods=['GET'])
+def about():
+    # Display the about page.
+    return render_template('about.html')
+
 # Database pages
 
 @app.route('/course/<int:id>', methods=['GET'])

@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+            
+{% block head %}
+<title>The Array</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="header mb-5">
+    <h1>About The Array</h1>
+</div>
+
+<div id="about-content">
+
+    <div class="row g-5 mb-5">
+
+        <div class="col-xl-8"> <div class="card border-0 rounded-0" style="background-color:aliceblue; color:black;">
+            <div class="card-body">
+                <h5 class="card-title">Calling all CCI students!</h5>
+                <p class="card-text"> Do you struggle to choose courses that teach what <b>you</b> want to know?
+                    Are you looking to be better prepared for what the <b>industry demands?</b></p>
+            </div>
+        </div> </div>
+
+        <div class="col-xl-4"> <div class="card border-0 rounded-0" style="background-color: rgb(43, 43, 43);">
+            <div class="card-body">
+                <h5 class="statement card-title">Introducing:</h5>
+                <hr style="height: 2rem; opacity: 0;">
+                <h5 class="statement"><b>The Array.</b></h5>
+            </div>
+        </div> </div>
+
+    </div>
+
+    <div class="row g-5 mb-5">
+
+        <div class="col-xl-12"> <div class="card border-0 rounded-0" style="background-color: black;">
+            <div class="card-body">
+                <h5 class="statement">
+                    For <b>UNCC Students</b> in the process of choosing a course of study,
+                    <b>The Array</b> is a website
+                    that <b>provides information</b>
+                    on which <b>software and programming languages</b> that the various classes in UNCC use, <b>how often</b> they are used, and various <b>software uses</b>.
+                    Unlike the <b>UNCC Software Webstore</b>,
+                    The Array explains the associations between UNCC <b>classes</b>, <b>programming languages</b>, and <b>software</b>, giving users the agency to <b>seek classes</b> that use software and languages they wish to become more familiar with. 
+                </h5>
+            </div>
+        </div> </div>
+
+    </div>
+
+    <div class="row g-5 mb-5">
+
+        <div class="col-xl-4"> <div class="card border-0 rounded-0" style="background-color: rgb(95, 95, 95);">
+            <div class="card-body">
+                <h5 class="card-title">Courses</h5>
+                <p class="card-text">Conveniently browse CCI courses, view descriptions, and explore their requirements.</p>
+            </div>
+        </div> </div>
+
+        <div class="col-xl-4"> <div class="card border-0 rounded-0" style="background-color:rgb(95, 95, 95);">
+            <div class="card-body">
+                <h5 class="card-title">Software</h5>
+                <p class="card-text">See what software works with the programming languages you have in mind.</p>
+            </div>
+        </div> </div>
+
+        <div class="col-xl-4"> <div class="card border-0 rounded-0" style="background-color:rgb(95, 95, 95);">
+            <div class="card-body">
+                <h5 class="card-title">Languages</h5>
+                <p class="card-text">Explore languages by course requirements, and get help setting them up with online guides.</p>
+            </div>
+        </div> </div>
+
+    </div>
+
+    <div class="row g-5 mb-5">
+
+        <div class="col-xl-6"> <div class="card border-0 rounded-0" style="background-color: rgb(43, 43, 43);">
+            <div class="card-body">
+                <h5 class="card-title">Search</h5>
+                <p class="card-text">A comprehensive search function allows you to effortlessly query all content available on The Array.</p>
+            </div>
+        </div> </div>
+
+        <div class="col-xl-6"> <div class="card border-0 rounded-0" style="background-color:aliceblue; color:black;">
+            <div class="card-body">
+                <h5 class="card-title">Professors and TAs</h5>
+                <p class="card-text">CCI faculty and assistants can update course details, write guides, and more with simple edit interfaces.</p>
+            </div>
+        </div> </div>
+
+    </div>
+
+    <div class="row g-5 mb-5">
+
+        <div class="col-xl-12"> <a href="/"> 
+            <div class="card rounded-0" style=" background-color: transparent;
+                                                border: solid;
+                                                color:black; min-height: 0">
+                <div class="card-body">
+                    <h5 style="font-style:italic; text-align: center;">Back to Home</h5>
+                </div>
+            </div>
+        </a> </div>
+
+    </div>
+
+    <div class="row g-5">
+
+        <div class="col-xl-12"> <div class="card border-0 rounded-0" style="background-color:rgb(61, 61, 61); color:darkgrey;">
+            <div class="card-body">
+                <h5 class="card-title">Credits</h5>
+                <p class="card-text">This website was written by <b>Mathew Shimko</b>, <b>Mary Johnson</b>, and <b>Jeffrey Wang</b>, as a project for <b>ITSC 3155</b> at UNC Charlotte.</p>
+                <p class="card-text">Written using <b>Flask</b> and <b>Bootstrap</b>.</p>
+                <p class="card-text">Copyright 2024.</p>
+            </div>
+        </div> </div>
+
+    </div>
+    
+</div>
+
+{% endblock %}
