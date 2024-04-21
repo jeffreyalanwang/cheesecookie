@@ -31,8 +31,8 @@ body {
     right: 0;
 }
 .nav-link {
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: calc((var(--nav-width) - 24px) / 2);
+    padding-right: calc((var(--nav-width) - 24px) / 2);
     margin-left: auto;
     margin-right: auto;
 }
