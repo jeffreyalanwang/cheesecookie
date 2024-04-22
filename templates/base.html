@@ -39,11 +39,23 @@
         </div>
 
         <div class="offcanvas-body">
-            
+
+            <a class="profile-link">
+                <h5>New course</h5>
+            </a>
+            <a class="profile-link">
+                <h5>Edit profile...</h5>
+            </a>
+            <a href="{{ url_for('userContentPage') }}" class="profile-link">
+                <h5>My content...</h5>
+            </a>
+
         </div>
 
         <div class="offcanvas-footer">
-
+            <a id="signOutButton" class="profile-link">
+                <h5>Sign out</h5>
+            </a>
         </div>
 
     </div>

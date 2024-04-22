@@ -16,6 +16,11 @@ body {
     --font-robo-style: 'Fira Mono', 'Courier New', Courier, monospace;
 }
 
+a {
+    color: unset;
+    text-decoration: none;
+}
+
 #edit_button, #save_button, #back_button {
     border-radius: 0;
     display: none;
@@ -51,4 +56,8 @@ body {
     border: none;
     color: whitesmoke;
     background-color: rgb(43, 43, 43)
+}
+
+.offcanvas-footer {
+    padding: var(--bs-offcanvas-padding-y) var(--bs-offcanvas-padding-x);
 }

@@ -102,8 +102,8 @@ def index():
     # Display the index page.
     return render_template('index.html')
 
-@app.route('/profile', methods=['GET'])
-def contentListPage():
+@app.route('/my_content', methods=['GET'])
+def userContentPage():
     # TODO support for individual users
     courses = db_access.allCourses()
     languages = db_access.allLanguages()

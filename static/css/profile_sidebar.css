@@ -13,13 +13,62 @@
     padding-right: var(--nav-width);
 }
 
+/* Header */
 #profile_sidebar .offcanvas-header {
     justify-content: center;
     align-content: center;
     padding-top: 2rem;
 }
 #profile_sidebar h1 {
+    all:unset;
+
+    font-size: 3rem;
+    font-weight: 500;
     font-family: var(--font-robo-style);
     text-align: center;
 }
 
+/* Body */
+.offcanvas-body * {
+    margin-bottom: calc(var(--bs-offcanvas-padding-y) / 2);
+}
+.offcanvas-body > :last-child {
+    margin-bottom: 0px;
+}
+
+/* All buttons */
+.profile-link {
+    background-color: transparent;
+    border: solid;
+    color:black;
+
+    width: 100%;
+    height: 5rem;
+
+    display: block;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+}
+.profile-link * {
+    margin:0;
+}
+.profile-link:hover {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+.profile-link:active {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Sign out button in footer */
+#signOutButton {
+    background-color: rgb(230, 0, 0);
+    border: none;
+    color:white;
+}
+#signOutButton:hover {
+    background-color: rgb(190, 0, 0);
+}
+#signOutButton:active {
+    background-color: rgb(120, 0, 0);
+}

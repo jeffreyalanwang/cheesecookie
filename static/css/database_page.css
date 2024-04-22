@@ -78,6 +78,5 @@
 .links-box a, .links-box p {
     display: block;
     font-family: var(--font-code-style);
-    text-decoration: none;
     color: inherit;
 }
