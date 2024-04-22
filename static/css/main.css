@@ -11,6 +11,9 @@ body {
     --nav-width: 50px;
     --nav-link-color: #fff;
     background-color: inherit !important;
+    /* Font scheme */
+    --font-code-style: 'Courier New', Courier, monospace;
+    --font-robo-style: 'Fira Mono', 'Courier New', Courier, monospace;
 }
 
 #edit_button, #save_button, #back_button {

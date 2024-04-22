@@ -12,3 +12,14 @@
 #profile_sidebar {
     padding-right: var(--nav-width);
 }
+
+#profile_sidebar .offcanvas-header {
+    justify-content: center;
+    align-content: center;
+    padding-top: 2rem;
+}
+#profile_sidebar h1 {
+    font-family: var(--font-robo-style);
+    text-align: center;
+}
+
