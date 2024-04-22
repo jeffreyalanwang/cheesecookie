@@ -66,7 +66,11 @@
                         No Prerequisites
 
                         {% else %} {% for i in range(0,requires|length) %} 
-                        <a href="/course/{{ requires[i].id }}">{{ requires[i].course_code }}</a>{% if i != requires|length-1 %}, {% endif %}
+                        <a style="
+                            color: rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1));
+                            text-decoration: underline;" 
+                            href="/course/{{ requires[i].id }}"
+                            >{{ requires[i].course_code }}</a>{% if i != requires|length-1 %}, {% endif %}
                         {% endfor %}
 
                         {% endif %}
