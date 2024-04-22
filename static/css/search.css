@@ -30,3 +30,36 @@ input[type=checkbox]
     margin-top: 5%;
     margin-bottom: 5%;
 }
+.icon-text {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 500;
+    font-size: 2cqw;
+    color: rgb(189, 189, 189);
+    line-height: 1;
+
+    align-items: center; 
+    justify-content: center;
+}
+
+.card-name-combo {
+    margin-bottom: 2%;
+}
+
+.card-group {
+    margin-bottom: 5%;
+}
+
+.card {
+    width: 10rem;
+    height: 10rem;
+    padding: 5%;
+}
+.card-title {
+    font-style: bold;
+    font-size: 6cqw;
+}
+
+.card-text{
+    font-style: italic;
+    align-items: center;
+}
