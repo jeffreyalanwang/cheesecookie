@@ -11,6 +11,7 @@
 
 #profile_sidebar {
     padding-right: var(--nav-width);
+    background-color: var(--site-background-color);
 }
 
 /* Header */

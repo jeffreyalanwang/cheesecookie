@@ -21,6 +21,7 @@
 </head>
 <body>
     {% block top %}{% endblock %}
+    <!-- Navbar -->
     <nav id="sidebar" class="nav d-flex flex-shrink-0 flex-column">
         <a class="nav-link" data-bs-toggle="tooltip" title="Home" href="/"><i class="material-icons">home</i></a>
         <a class="nav-link" data-bs-toggle="tooltip" title="Search" href="/search"><i class="material-icons">search</i></a>
@@ -35,25 +36,49 @@
     <div id="profile_sidebar" class="offcanvas offcanvas-end" tabindex="-1" aria-labelledby="offcanvasExampleLabel">
         
         <div class="offcanvas-header">
-            <h1 class="offcanvas-title">Welcome, user!</h5>
+            <div class="signed-out">
+                <h1 class="offcanvas-title">Sign in</h5>
+            </div>
+            <h1 class="offcanvas-title signed-in">Welcome, user!</h5>
         </div>
 
         <div class="offcanvas-body">
 
-            <a class="profile-link">
+            <!-- Google OAuth button -->
+            <div class="signed-out d-flex justify-content-center">
+                <div id="g_id_onload"
+                    data-client_id="977969718809-jsvd5h775kp3klnt0f79rmhhv07492te.apps.googleusercontent.com"
+                    data-context="signin"
+                    data-ux_mode="popup"
+                    data-login_uri="https://the-array-b1de1248d610.herokuapp.com"
+                    data-auto_prompt="false">
+                </div>
+
+                <div class="g_id_signin d-flex"
+                    data-type="standard"
+                    data-shape="rectangular"
+                    data-theme="filled_black"
+                    data-text="signin_with"
+                    data-size="large"
+                    data-logo_alignment="left"
+                    data-width="200">
+                </div>
+            </div>
+
+            <a href="{#{ url_for('newDatabaseContent', type='course') }#}" class="profile-link signed-in">
                 <h5>New course</h5>
             </a>
-            <a class="profile-link">
-                <h5>Edit profile...</h5>
+            <a href="{#{ url_for('userDetailsPage') }#}" class="profile-link signed-in">
+                <h5>See profile...</h5>
             </a>
-            <a href="{{ url_for('userContentPage') }}" class="profile-link">
+            <a href="{{ url_for('userContentPage') }}" class="profile-link signed-in">
                 <h5>My content...</h5>
             </a>
 
         </div>
 
         <div class="offcanvas-footer">
-            <a id="signOutButton" class="profile-link">
+            <a id="signOutButton" class="profile-link signed-in">
                 <h5>Sign out</h5>
             </a>
         </div>
@@ -78,7 +103,8 @@
     </script>
     <!-- makes profile sidebar work -->
     <script src="{{ url_for('static', filename='js/profile_sidebar.js') }}"></script>
-
+    <!-- Google sign-in -->
+    <script src="https://accounts.google.com/gsi/client" async></script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

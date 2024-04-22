@@ -1,5 +1,6 @@
 html {
-    background-color: #DDDDDD
+    --site-background-color: #DDDDDD;
+    background-color: var(--site-background-color);
 }
 
 body {
