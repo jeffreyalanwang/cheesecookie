@@ -45,7 +45,7 @@
         <div class="offcanvas-body">
 
             <!-- Google OAuth button -->
-            <div class="signed-out d-flex justify-content-center">
+            <div class="signed-out" style="display:flex; justify-content: center;">
                 <div id="g_id_onload"
                     data-client_id="977969718809-jsvd5h775kp3klnt0f79rmhhv07492te.apps.googleusercontent.com"
                     data-context="signin"
@@ -54,7 +54,7 @@
                     data-auto_prompt="false">
                 </div>
 
-                <div class="g_id_signin d-flex"
+                <div class="g_id_signin signed-out"
                     data-type="standard"
                     data-shape="rectangular"
                     data-theme="filled_black"
@@ -65,10 +65,10 @@
                 </div>
             </div>
 
-            <a href="{#{ url_for('newDatabaseContent', type='course') }#}" class="profile-link signed-in">
+            <a href="{{ url_for('newDatabaseContent', type='course') }}" class="profile-link signed-in">
                 <h5>New course</h5>
             </a>
-            <a href="{#{ url_for('userDetailsPage') }#}" class="profile-link signed-in">
+            <a href="{{ url_for('userDetailsPage', user-id='0') }}" class="profile-link signed-in">
                 <h5>See profile...</h5>
             </a>
             <a href="{{ url_for('userContentPage') }}" class="profile-link signed-in">
