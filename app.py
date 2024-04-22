@@ -104,8 +104,8 @@ def index():
 
 @app.route('/profile', methods=['GET'])
 def userDetailsPage():
-    # i.e. ?user-id=VALUE
-    userId = request.args.get('user-id')
+    # i.e. ?user_id=VALUE
+    userId = request.args.get('user_id')
     # TODO get user attributes from database, pass them to profile.html
     return render_template('profile.html')
 
