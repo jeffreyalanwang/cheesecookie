@@ -6,8 +6,8 @@
 
 .chips-container { 
     display: flex;
-    gap: 10px;
-    flex-wrap:wrap;
+    gap: 7px;
+    flex-wrap: wrap;
 } 
   
 .chip {
@@ -31,8 +31,6 @@
     flex-grow: 100;
 } 
 .chip-form .chip-input {
-    margin-left: 5px; 
-    margin-top: 3px;
     color: white;
     background: none;
     border: none;

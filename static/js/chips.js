@@ -12,9 +12,11 @@ function removeOption(id, dataList) {
 // Function to create a new chip 
 function createChip(name, id, containerClass) { 
     const dataList = $( "datalist", $(containerClass).parent() );
+
     $(containerClass)
         // add chip element
-        .append($('<div></div>')
+        // afterElement.before(newElement);
+        .children(".chip-form").before($('<div></div>')
         .addClass("chip") 
             // add chip's name element
             .append($('<div></div>')
