@@ -12,6 +12,11 @@ body {
     background-color: inherit !important;
 }
 
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
 #edit_button, #save_button, #back_button {
     border-radius: 0;
     display: none;
