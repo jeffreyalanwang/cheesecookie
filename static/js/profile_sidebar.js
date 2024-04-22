@@ -11,8 +11,6 @@ $(document).ready(function($)
 
 // Google OAuth
 
-// reminder to jeffrey to edit the home page so that my content shows all content instead if not signed in
-
 // reminder to jeffrey to write in support for the three other pages
 
 // handle sidebar open/close
