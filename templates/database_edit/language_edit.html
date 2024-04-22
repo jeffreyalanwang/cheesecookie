@@ -12,10 +12,11 @@
 <title>Edit: {{ language.name }}</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/database_page.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/database_edit_page.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chips.css') }}">
 {% endblock %}
 
-{% block top %}<form>{% endblock %}
-{% block bottom %}<form>{% endblock %}
+{% block top %}<form id="main-form">{% endblock %}
+{% block bottom %}</form>{% endblock %}
 
 {% block body %}
 
@@ -29,7 +30,7 @@
             </div>
             <div id="icon_form" class="position-absolute d-flex justify-content-center">
                 <i class="material-icons">publish</i>
-                <input id="image" type="file" accept="image/*">
+                <input form="main-form" id="image" type="file" accept="image/*">
             </div>
         </div> </div>
 
@@ -37,7 +38,7 @@
         <div class="col"> <div id="details" class="overflow-auto">
 
             <!-- Title -->
-            <input type="text" class="form-control info_title mb-3" id="name"
+            <input form="main-form" type="text" class="form-control info_title mb-3" id="name"
                 {% if language.name is not none %} value="{{ language.name }}" {% endif %} 
                 placeholder="Language name">
 
@@ -49,7 +50,7 @@
                         Official site
                     </div>
                     <div class="col-sm-6 info_text"> 
-                        <input type="text" class="form-control infoInput" id="site_url"
+                        <input form="main-form" type="text" class="form-control infoInput" id="site_url"
                         {% if language.site_url is not none %} value="{{ language.site_url }}" {% endif %} 
                         placeholder="URL">
                     </div>
@@ -60,7 +61,7 @@
                         Download page
                     </div>
                     <div class="col-sm-6 info_text"> 
-                        <input type="text" class="form-control infoInput" id="download_url"
+                        <input form="main-form" type="text" class="form-control infoInput" id="download_url"
                         {% if language.download_url is not none %} value="{{ language.download_url }}" {% endif %}
                         placeholder="URL">
                     </div>
@@ -71,7 +72,7 @@
                         Documentation
                     </div>
                     <div class="col-sm-6 info_text"> 
-                        <input type="text" class="form-control infoInput" id="documentation_url"
+                        <input form="main-form" type="text" class="form-control infoInput" id="documentation_url"
                         {% if language.documentation_url is not none %} value="{{ language.documentation_url }}" {% endif %}
                         placeholder="URL">
                     </div>
@@ -80,7 +81,7 @@
             </div>
 
             <!-- Description -->
-            <textarea type="text" class="form-control mt-4" id="description" placeholder="Language description">{% if language.description is not none %}{{ language.description }}{% endif %}</textarea>
+            <textarea type="text" form="main-form" class="form-control mt-4" id="description" placeholder="Language description">{% if language.description is not none %}{{ language.description }}{% endif %}</textarea>
 
         </div> </div>
 
@@ -91,17 +92,41 @@
         <div class="col-xl-6"> <div class="links-box">
             <h>Compatible Software</h>
 
-            <input type="text" class="form-control" id="softwares"
-                value="{% for i in range(0,softwares|length) %}{{ softwares[i].name }}{% if i != softwares|length-1 %}, {% endif %}{% endfor %}"
-                placeholder="Software names">
+            <div class="software-chips chips-input-container form-control">
+                <div class="software-chips chips-container"> </div> 
+                
+                <div class="software-chips chip-form"> 
+                    <input list="software-options" placeholder="Type to search..." class="chip-input">
+                    <datalist id="software-options">
+                        {% for i in range(0,all_software|length) %}
+                            <option value="{{ all_software[i].name }}" data-id="{{ all_software[i].id }}">
+                        {% endfor %}
+                    </datalist>
+
+                    <button type="button"><i class="material-icons">add</i></button> 
+                </div> 
+
+            </div>
         </div> </div>
 
         <div class="col-xl-6"> <div class="links-box">
             <h>Courses Using</h>
 
-            <input type="text" class="form-control" id="courses"
-                value="{% for i in range(0,courses|length) %}{{ courses[i].course_code }}{% if i != courses|length-1 %}, {% endif %}{% endfor %}"
-                placeholder="Course codes">
+            <div class="course-chips chips-input-container form-control">
+                <div class="course-chips chips-container"> </div> 
+                
+                <div class="course-chips chip-form"> 
+                    <input list="course-options" placeholder="Type to search..." class="chip-input">
+                    <datalist id="course-options">
+                        {% for i in range(0,all_course|length) %}
+                            <option value="{{ all_course[i].course_code }}" data-id="{{ all_course[i].id }}">
+                        {% endfor %}
+                    </datalist>
+
+                    <button type="button"><i class="material-icons">add</i></button> 
+                </div> 
+
+            </div>
         </div> </div>
 
     </div>
@@ -111,6 +136,17 @@
 {% endblock %}
 
 {% block scripts %}
+<!-- Enable functionality for chip-based entry; goes with chips.css in head block -->
+<script src="{{ url_for('static', filename='js/chips.js') }}"></script>
+<!-- Add placeholder chips at load time -->
+<script>
+    {% for i in range(0,courses|length) %}
+        createChip("{{ courses[i].course_code }}", {{ courses[i].id }}, ".chips-container" + ".course-chips");
+    {% endfor %}
+    {% for i in range(0,softwares|length) %}
+        createChip("{{ softwares[i].name }}", {{ softwares[i].id }}, ".chips-container" + ".software-chips");
+    {% endfor %}
+</script>
 <!-- Auto-updating icon based on user upload -->
 <script src="{{ url_for('static', filename='js/database_form_icon.js') }}"></script>
 <!-- Will submit POST data with an entry for each form element ID -->

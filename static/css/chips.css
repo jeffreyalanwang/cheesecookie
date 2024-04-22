@@ -1,0 +1,60 @@
+.chips-input-container {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+.chips-container { 
+    display: flex;
+    gap: 10px;
+} 
+  
+.chip {
+    cursor: pointer;
+    padding-left: .5rem;
+    display: flex; 
+    align-items: center; 
+    color: black;
+    background-color: #f0f0f0; 
+    gap: 5px; 
+    white-space:nowrap
+}
+.close-icon { 
+    font-weight: bold; 
+    color: red; 
+    padding-right: .6rem;
+}
+  
+.chip-form {
+    display: flex;
+    flex-grow: 100;
+} 
+.chip-form .chip-input {
+    margin-left: 5px; 
+    margin-top: 3px;
+    color: white;
+    background: none;
+    border: none;
+    padding: 0;
+    width: 100%;
+}
+.chip-form .chip-input:focus {
+    outline: none;
+}
+.chip-form button {
+    border: none;
+    background: none;
+    color: white;
+    cursor: pointer; 
+
+    position:absolute;
+    bottom:0;
+    right:0;
+}
+
+#details .chip-input {
+    color: black;
+}
+#details button {
+    color: black;
+}

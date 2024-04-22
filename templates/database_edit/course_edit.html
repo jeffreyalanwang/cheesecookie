@@ -12,10 +12,11 @@
 <title>Edit: {{ course.title }}</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/database_page.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/database_edit_page.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chips.css') }}">
 {% endblock %}
 
-{% block top %}<form>{% endblock %}
-{% block bottom %}<form>{% endblock %}
+{% block top %}<form id="main-form">{% endblock %}
+{% block bottom %}</form>{% endblock %}
 
 {% block body %}
 
@@ -26,7 +27,7 @@
         <div class="col"> <div id="details" class="overflow-auto">
 
             <!-- Title -->
-            <input type="text" class="form-control info_title mb-3" id="title"
+            <input type="text" form="main-form" class="form-control info_title mb-3" id="title"
                 {% if course.title is not none %} value="{{ course.title }}" {% endif %} 
                 placeholder="Course title">
 
@@ -38,7 +39,7 @@
                         Course code
                     </div>
                     <div class="col-sm-6 info_text"> 
-                        <input type="text" class="form-control infoInput" id="course_code"
+                        <input form="main-form" type="text" class="form-control infoInput" id="course_code"
                         {% if course.course_code is not none %} value="{{ course.course_code }}" {% endif %} 
                         placeholder="Course code">
                     </div>
@@ -49,29 +50,39 @@
                         Credit hours
                     </div>
                     <div class="col-sm-6 info_text"> 
-                        <input type="text" class="form-control infoInput" id="credit_hours"
+                        <input form="main-form" type="text" class="form-control infoInput" id="credit_hours"
                         {% if course.credit_hours is not none %} value="{{ course.credit_hours }}" {% endif %}
                         placeholder="Credit hours">
                     </div>
                 </div>
 
                 <div class="row d-flex align-items-center">
-                    <div class="col-sm-6 info_category"> 
+                    <div class="col-sm-6 info_category" style="align-self: flex-start; padding-top:5px;"> 
                         Prerequisites
                     </div>
                     <div class="col-sm-6 info_text"> 
-                        <input type="text" class="form-control infoInput" id="course_requires"
-                        {% if course is not none and requires|length >= 1  %}value=
-                        "{% for i in range(0,requires|length) %}{{ requires[i].course_code }}{% if i != requires|length-1 %}, {% endif %}{% endfor %}"
-                        {% endif %} 
-                        placeholder="Prerequisites">
+                        <div class="course-chips chips-input-container form-control">
+                            <div class="course-chips chips-container"> </div> 
+                            
+                            <div class="course-chips chip-form"> 
+                                <input list="course-options" placeholder="Type to search..." class="chip-input">
+                                <datalist id="course-options">
+                                    {% for i in range(0,all_course|length) %}
+                                        <option value="{{ all_course[i].course_code }}" data-id="{{ all_course[i].id }}">
+                                    {% endfor %}
+                                </datalist>
+            
+                                <button type="button"><i class="material-icons">add</i></button> 
+                            </div> 
+            
+                        </div>
                     </div>
                 </div> 
 
             </div>
 
             <!-- Description -->
-            <textarea type="text" class="form-control mt-4" id="description" placeholder="Course description">{% if course.description is not none %}{{ course.description }}{% endif %}</textarea>
+            <textarea form="main-form" type="text" class="form-control mt-4" id="description" placeholder="Course description">{% if course.description is not none %}{{ course.description }}{% endif %}</textarea>
 
         </div> </div>
 
@@ -82,17 +93,41 @@
         <div class="col-xl-6"> <div class="links-box">
             <h>Software Used</h>
 
-            <input type="text" class="form-control" id="softwares"
-                value="{% for i in range(0,softwares|length) %}{{ softwares[i].name }}{% if i != softwares|length-1 %}, {% endif %}{% endfor %}"
-                placeholder="Software names">
+            <div class="software-chips chips-input-container form-control">
+                <div class="software-chips chips-container"> </div> 
+                
+                <div class="software-chips chip-form"> 
+                    <input list="software-options" placeholder="Type to search..." class="chip-input">
+                    <datalist id="software-options">
+                        {% for i in range(0,all_software|length) %}
+                            <option value="{{ all_software[i].name }}" data-id="{{ all_software[i].id }}">
+                        {% endfor %}
+                    </datalist>
+
+                    <button type="button"><i class="material-icons">add</i></button> 
+                </div> 
+
+            </div>
         </div> </div>
 
         <div class="col-xl-6"> <div class="links-box">
             <h>Languages Used</h>
 
-            <input type="text" class="form-control" id="languages"
-                value="{% for i in range(0,languages|length) %}{{ languages[i].name }}{% if i != languages|length-1 %}, {% endif %}{% endfor %}"
-                placeholder="Language names">
+            <div class="language-chips chips-input-container form-control">
+                <div class="language-chips chips-container"> </div> 
+                
+                <div class="language-chips chip-form"> 
+                    <input list="language-options" placeholder="Type to search..." class="chip-input">
+                    <datalist id="language-options">
+                        {% for i in range(0,all_language|length) %}
+                            <option value="{{ all_language[i].name }}" data-id="{{ all_language[i].id }}">
+                        {% endfor %}
+                    </datalist>
+
+                    <button type="button"><i class="material-icons">add</i></button> 
+                </div> 
+
+            </div>
         </div> </div>
 
     </div>
@@ -102,6 +137,20 @@
 {% endblock %}
 
 {% block scripts %}
+<!-- Enable functionality for chip-based entry; goes with chips.css in head block -->
+<script src="{{ url_for('static', filename='js/chips.js') }}"></script>
+<!-- Add placeholder chips at load time -->
+<script>
+    {% for i in range(0,requires|length) %}
+        createChip("{{ requires[i].course_code }}", {{ requires[i].id }}, ".chips-container" + ".course-chips");
+    {% endfor %}
+    {% for i in range(0,softwares|length) %}
+        createChip("{{ softwares[i].name }}", {{ softwares[i].id }}, ".chips-container" + ".software-chips");
+    {% endfor %}
+    {% for i in range(0,languages|length) %}
+        createChip("{{ languages[i].name }}", {{ languages[i].id }}, ".chips-container" + ".language-chips");
+    {% endfor %}
+</script>
 <!-- Will submit POST data with an entry for each form element ID -->
 <script src="{{ url_for('static', filename='js/form_submit.js') }}"></script>
 {% endblock %}

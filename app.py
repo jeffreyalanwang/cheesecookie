@@ -230,8 +230,13 @@ def courseEditPage(id):
                             credit_hours=int(results["credit_hours"]),
                             description=results["description"])
 
+    all_course = db_access.allCourses(Course.id)
+    all_language = db_access.allLanguages(Language.id)
+    all_software = db_access.allSoftwares(Software.id)
     course = db_access.getCourse(id)
-    return render_template('database_edit/course_edit.html', course=course,languages=course.compatible_language, softwares=course.compatible_software, requires=course.course_requires)
+    return render_template('database_edit/course_edit.html', course=course, 
+                           languages=course.compatible_language, softwares=course.compatible_software, requires=course.course_requires,
+                           all_course=all_course, all_language=all_language, all_software=all_software)
 
 @app.route('/language/<int:id>', methods=['GET'])
 def languagePage(id):
@@ -255,8 +260,13 @@ def languageEditPage(id):
             if imgFile.filename:
                 imgSave('language', id, imgFile)
 
+    all_course = db_access.allCourses(Course.id)
+    all_language = db_access.allLanguages(Language.id)
+    all_software = db_access.allSoftwares(Software.id)
     language = db_access.getLanguage(id)
-    return render_template('database_edit/language_edit.html', id=id, language=language,courses=language.compatible_course, softwares=language.compatible_software)
+    return render_template('database_edit/language_edit.html', id=id, language=language,
+                           courses=language.compatible_course, softwares=language.compatible_software,
+                           all_course=all_course, all_language=all_language, all_software=all_software)
 
 @app.route('/software/<int:id>', methods=['GET'])
 def softwarePage(id):
@@ -280,8 +290,13 @@ def softwareEditPage(id):
             if imgFile.filename:
                 imgSave('software', id, imgFile)
 
+    all_course = db_access.allCourses(Course.id)
+    all_language = db_access.allLanguages(Language.id)
+    all_software = db_access.allSoftwares(Software.id)
     software = db_access.getSoftware(id)
-    return render_template('database_edit/software_edit.html', id=id, software=software,languages=software.compatible_language, courses=software.compatible_course)
+    return render_template('database_edit/software_edit.html', id=id, software=software,
+                            languages=software.compatible_language, courses=software.compatible_course,
+                            all_course=all_course, all_language=all_language, all_software=all_software)
 
 # e.g. /software/1/guide/1
 # type can be language or software.
