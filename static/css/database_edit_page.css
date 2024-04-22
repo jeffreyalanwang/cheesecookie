@@ -3,7 +3,7 @@
 }
 
 #save_button, #back_button {
-    display: inherit;
+    display: flex;
 }
 
 form {

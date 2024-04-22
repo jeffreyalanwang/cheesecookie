@@ -1,0 +1,14 @@
+@media screen and (max-width: 600px) {
+    #profile_sidebar {
+        width: 100% !important;
+        border-left: 0 !important;
+    }
+}
+
+.nav {
+    z-index: 3000;
+}
+
+#profile_sidebar {
+    padding-right: var(--nav-width);
+}

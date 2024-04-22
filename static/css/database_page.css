@@ -3,7 +3,7 @@
 }
 
 #edit_button {
-    display: inherit;
+    display: flex;
 }
 
 /* applies margin to all rows; column margins are applied within each row using bootstrap classes */

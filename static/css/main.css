@@ -9,6 +9,7 @@ body {
     display: flex;
     width: 100%;
     --nav-width: 50px;
+    --nav-link-color: #fff;
     background-color: inherit !important;
 }
 
@@ -30,9 +31,9 @@ body {
     float: right;
     right: 0;
 }
-.nav-link,
-.navbar-brand {
-    color: #fff;
+.nav-link {
+    display: flex;
+    color: var(--nav-link-color);
     cursor: pointer;
 }
 .nav-link:hover {
