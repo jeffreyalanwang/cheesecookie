@@ -7,7 +7,6 @@ class DBAccess:
         self.Software = SoftwareModel
 
     # Add, set, get, search database entries
-    # delete support not implemented
 
     def addCourse(self, title=None, course_code=None, credit_hours=None, description=None):
         course = self.Course(title=title, course_code=course_code, credit_hours=credit_hours, description=description)
@@ -24,8 +23,15 @@ class DBAccess:
         
         self.db.session.commit()
 
+    def deleteCourse(self, id):
+        course = self.Course.query.filter_by(id=id)
+        course.delete()
+
+        self.db.session.commit()
+
     def getCourse(self, id):
         return self.Course.query.get_or_404(id)
+    
 
     def allCourses(self, order=None):
         query = self.Course.query
@@ -76,6 +82,12 @@ class DBAccess:
 
         self.db.session.commit()
 
+    def deleteLanguage(self, id):
+        language = self.Language.query.filter_by(id=id)
+        language.delete()
+
+        self.db.session.commit()
+
     def getLanguage(self, id):
         return self.Language.query.get_or_404(id)
 
@@ -114,6 +126,12 @@ class DBAccess:
 
         self.db.session.commit()
 
+    def deleteSoftware(self, id):
+        software = self.Software.query.filter_by(id=id)
+        software.delete()
+
+        self.db.session.commit()
+
     def getSoftware(self, id):
         return self.Software.query.get_or_404(id)
 
@@ -146,6 +164,14 @@ class DBAccess:
         
         self.db.session.commit()
 
+    def deleteCoursePrerequisite(self, course_id, prerequisite_id):
+        course = self.Course.query.get_or_404(course_id)
+        prerequisite = self.Course.query.get_or_404(prerequisite_id)
+        prerequisite.prerequisite_of.remove(course)
+        
+        self.db.session.commit()
+
+
     def addCourseLanguage(self, course_id, language_id):
         course = self.Course.query.get_or_404(course_id)
         language = self.Language.query.get_or_404(language_id)
@@ -154,8 +180,20 @@ class DBAccess:
 
         self.db.session.commit()
 
+    def deleteCourseLanguage(self, course_id, language_id):
+        course = self.Course.query.get_or_404(course_id)
+        language = self.Language.query.get_or_404(language_id)
+
+        course.compatible_language.remove(language)
+
+        self.db.session.commit()
+
     def addLanguageCourse(self, language_id, course_id):
         self.addCourseLangage(course_id, language_id)
+
+    def deleteLanguageCourse(self, language_id, course_id):
+        self.deleteCourseLangage(course_id, language_id)
+
 
     def addCourseSoftware(self, course_id, software_id):
         course = self.Course.query.get_or_404(course_id)
@@ -164,9 +202,21 @@ class DBAccess:
         course.compatible_software.append(software)
 
         self.db.session.commit()
+    
+    def deleteCourseSoftware(self, course_id, software_id):
+        course = self.Course.query.get_or_404(course_id)
+        software = self.Software.query.get_or_404(software_id)
+
+        course.compatible_software.remove(software)
+
+        self.db.session.commit()
 
     def addSoftwareCourse(self, software_id, course_id):
         self.addCourseSoftware(course_id, software_id)
+
+    def deleteSoftwareCourse(self, software_id, course_id):
+        self.deleteCourseSoftware(course_id, software_id)
+
 
     def addLanguageSoftware(self, language_id, software_id):
         language = self.Language.query.get_or_404(language_id)
@@ -176,5 +226,16 @@ class DBAccess:
 
         self.db.session.commit()
 
+    def deleteLanguageSoftware(self, language_id, software_id):
+        language = self.Language.query.get_or_404(language_id)
+        software = self.Software.query.get_or_404(software_id)
+
+        language.compatible_software.remove(software)
+
+        self.db.session.commit()
+
     def addSoftwareLanguage(self, software_id, language_id):
         self.addLanguageSoftware(language_id, software_id)
+
+    def deleteSoftwareLanguage(self, software_id, language_id):
+        self.deleteLanguageSoftware(language_id, software_id)
