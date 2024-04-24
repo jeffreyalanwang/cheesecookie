@@ -1,5 +1,6 @@
 html {
-    background-color: #DDDDDD
+    --site-background-color: #DDDDDD;
+    background-color: var(--site-background-color);
 }
 
 body {
@@ -9,7 +10,17 @@ body {
     display: flex;
     width: 100%;
     --nav-width: 50px;
+    --nav-link-color: #fff;
     background-color: inherit !important;
+    /* Font scheme */
+    --font-code-style: 'Courier New', Courier, monospace;
+    --font-robo-style: 'Fira Mono', 'Courier New', Courier, monospace;
+}
+
+
+a {
+    color: inherit;
+    text-decoration: none;
 }
 
 a {
@@ -43,6 +54,10 @@ a {
 }
 .nav-link, .navbar-brand {
     color: #fff;
+}
+.nav-link {
+    display: flex;
+    color: var(--nav-link-color);
     cursor: pointer;
 }
 .nav-link:hover {
@@ -60,4 +75,8 @@ a {
     border: none;
     color: whitesmoke;
     background-color: rgb(43, 43, 43)
+}
+
+.offcanvas-footer {
+    padding: var(--bs-offcanvas-padding-y) var(--bs-offcanvas-padding-x);
 }

@@ -98,9 +98,20 @@ def index():
     # Display the index page.
     return render_template('index.html')
 
+@app.route('/profile', methods=['GET'])
+def userDetailsPage():
+    # i.e. ?user_id=VALUE
+    userId = request.args.get('user_id')
+    # TODO get user attributes from database, pass them to profile.html
+    return render_template('profile.html')
+
 @app.route('/my_content', methods=['GET'])
-def contentListPage():
-    return render_template('explore.html', softwares=softwares,languages=languages, courses=courses)
+def userContentPage():
+    # TODO support for individual users
+    courses = db_access.allCourses()
+    languages = db_access.allLanguages()
+    softwares = db_access.allSoftwares()
+    return render_template('my_content.html', softwares=softwares,languages=languages, courses=courses)
 
 @app.route('/explore/', methods=['GET'])
 def explorePage():
@@ -252,6 +263,29 @@ def guideEditPage(type, id, guide_id):
             # TODO save content in database
 
     return render_template('database_edit/guide_edit.html', guide=guide)
+
+@app.route('/<path:type>/new', methods=['GET'])
+def newDatabaseContent(type):
+    
+    match type:
+        case "course":
+            target_db = Course
+            editPage = courseEditPage
+        case "software":
+            target_db = Software
+            editPage = softwareEditPage
+        case "language":
+            target_db = Language
+            editPage = languageEditPage
+        case _:
+            app.logger.error('Bad content type')
+
+    # TODO   
+    # create new item in target db
+    # get id of new course
+    id = 0
+    # redirect user to edit new page
+    return redirect(url_for(editPage.__name__, id=id))
 
 # Run in debug mode so errors get displayed
 if __name__ == "__main__":

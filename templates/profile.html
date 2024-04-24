@@ -1,0 +1,87 @@
+<!--
+    Mary Johnson
+    Matthew Shimko
+    Jeffery Wang
+
+    Written by Mary Johnson
+-->
+
+{% extends 'base.html' %}
+
+{% block head %}
+<title>{{ course.title }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div id="blocks" class="container mt-5">
+    <div id="header-row" class="row g-5">
+        
+        <!-- Icon or course code -->
+        <div class="col-xl-4"> <div class="ratio ratio-1x1">
+            <div id="icon">
+                <div> {% for line in course.course_code.split() %}
+
+                        <h class="icon-text">{{ line }}</h>
+                        <br>
+                    
+                {% endfor %} </div>
+            </div>
+        </div> </div>
+
+        <!-- Info card -->
+        <div class="col-xl-8"> <div id="details" class="overflow-auto">
+
+            <!-- Title -->
+            <h id="title" class="d-flex justify-content-center mb-3">{{ course.title }}</h>
+            
+            <!-- Info -->
+            <div class="container">
+                
+                <div class="row">
+                    <div class="col-sm-6 info_category"> 
+                        Course code
+                    </div>
+                    <div class="col-sm-6 info_text"> 
+                        {{ course.course_code }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6 info_category"> 
+                        Credit hours
+                    </div>
+                    <div class="col-sm-6 info_text"> 
+                        {{ course.credit_hours }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6 info_category"> 
+                        Prerequisites
+                    </div>
+                    <div class="col-sm-6 info_text"> 
+                        {% if requires|length < 1  %}
+                        No Prerequisites
+
+                        {% else %} {% for i in range(0,requires|length) %} 
+                        <a href="/course/{{ requires[i].id }}">{{ requires[i].course_code }}</a>{% if i != requires|length-1 %}, {% endif %}
+                        {% endfor %}
+
+                        {% endif %}
+                    </div>
+                </div> 
+
+            </div>
+
+            <!-- Description -->
+            {% if course.description %}
+            <p class="mt-4">{{ course.description }}</p>
+            {% endif %}
+
+        </div> </div>
+
+    </div>
+
+{% endblock %}
