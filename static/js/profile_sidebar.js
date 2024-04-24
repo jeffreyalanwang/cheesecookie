@@ -7,7 +7,7 @@ import("https://unpkg.com/jwt-decode@4.0.0/build/esm/index.js").then((module) =>
 function handleGToken(token) {
     let payload = jwtDecode(token["credential"]);
     const user_details = {};
-    user_details["user_id"] = payload["sub"]
+    user_details["user_id"] = payload["sub"];
     user_details["email"] = payload["email"];
     user_details["picture_url"] = payload["picture"];
     user_details["name"] = payload["given_name"] + payload["family_name"];
