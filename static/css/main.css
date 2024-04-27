@@ -17,12 +17,10 @@ body {
     --font-robo-style: 'Fira Mono', 'Courier New', Courier, monospace;
 }
 
-
 a {
     color: inherit;
     text-decoration: none;
 }
-
 
 #edit_button, #save_button, #back_button {
     border-radius: 0;
@@ -42,25 +40,21 @@ a {
     float: right;
     right: 0;
 }
+.nav > *:first-child {
+    padding-top: 1rem;
+}
 .nav-link {
     padding-left: calc((var(--nav-width) - 24px) / 2);
     padding-right: calc((var(--nav-width) - 24px) / 2);
     margin-left: auto;
     margin-right: auto;
-}
-.nav-link, .navbar-brand {
-    color: #fff;
-}
-.nav-link {
+    
     display: flex;
     color: var(--nav-link-color);
     cursor: pointer;
 }
 .nav-link:hover {
     color: #8d8d8d;
-}
-.nav-link:first-child {
-    padding-top: 1rem;
 }
 
 #content {
