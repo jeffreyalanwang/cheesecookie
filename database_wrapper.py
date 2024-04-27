@@ -1,10 +1,14 @@
 # wrapper class for SQLAlchemy database
 class DBAccess:
-    def __init__(self, db, CourseModel, LanguageModel, SoftwareModel):
+    def __init__(self, db, CourseModel, LanguageModel, SoftwareModel, User, LanguageGuide, SoftwareGuide):
         self.db = db
         self.Course = CourseModel
         self.Language = LanguageModel
         self.Software = SoftwareModel
+        
+        self.User = User
+        self.LanguageGuide = LanguageGuide
+        self.SoftwareGuide = SoftwareGuide
 
     # Add, set, get, search database entries
 
@@ -239,3 +243,120 @@ class DBAccess:
 
     def deleteSoftwareLanguage(self, software_id, language_id):
         self.deleteLanguageSoftware(language_id, software_id)
+
+
+    # Removes all relationships and re-adds them
+    def setPrereq_Editor(self, course_id, prereqStr):
+        course = self.Course.query.get_or_404(course_id)
+
+        #remove all course language relationships
+        course.course_requires = []
+
+        prereqList = prereqStr.split(",")
+        for prereq_id in prereqList:
+            prereq = self.Course.query.get_or_404(prereq_id)
+
+            course.course_requires.append(prereq)
+        
+        self.db.session.commit()
+
+    def setRequiredBy_Editor(self, course_id, reqStr):
+        course = self.Course.query.get_or_404(course_id)
+
+        #remove all course language relationships
+        course.prerequisite_of = []
+
+        reqList = reqStr.split(",")
+        for req_id in reqList:
+            req = self.Course.query.get_or_404(req_id)
+
+            course.prerequisite_of.append(req)
+        
+        self.db.session.commit()
+
+
+    def setCourseLanguage_Editor(self, course_id, languageStr):
+        course = self.Course.query.get_or_404(course_id)
+
+        #remove all course language relationships
+        course.compatible_language = []
+
+        languageList = languageStr.split(",")
+        for language_id in languageList:
+            language = self.Language.query.get_or_404(language_id)
+
+            course.compatible_language.append(language)
+        
+        self.db.session.commit()
+
+    def setCourseSoftware_Editor(self, course_id, softwareStr):
+        course = self.Course.query.get_or_404(course_id)
+
+        #remove all course language relationships
+        course.compatible_software = []
+
+        softwareList = softwareStr.split(",")
+        for software_id in softwareList:
+            software = self.Software.query.get_or_404(software_id)
+
+            course.compatible_software.append(software)
+        
+        self.db.session.commit()
+
+
+    def setLanguageCourse_Editor(self, language_id, courseStr):
+        language = self.Language.query.get_or_404(language_id)
+
+        #remove all language course relationships
+        language.compatible_course = []
+
+        courseList = courseStr.split(",")
+        for course_id in courseList:
+            course = self.Course.query.get_or_404(course_id)
+
+            language.compatible_language.append(course)
+        
+        self.db.session.commit()
+
+    def setLanguageSoftware_Editor(self, language_id, softwareStr):
+        language = self.Course.query.get_or_404(language_id)
+
+        #remove all language software relationships
+        language.compatible_software = []
+
+        softwareList = softwareStr.split(",")
+        for software_id in softwareList:
+            software = self.Software.query.get_or_404(software_id)
+
+            language.compatible_language.append(software)
+        
+        self.db.session.commit()
+    
+
+    def setSoftwareCourse_Editor(self, software_id, courseStr):
+        software = self.Software.query.get_or_404(software_id)
+
+        #remove all software course relationships
+        software.compatible_course = []
+
+        courseList = courseStr.split(",")
+        for course_id in courseList:
+            course = self.Course.query.get_or_404(course_id)
+
+            software.compatible_language.append(course)
+        
+        self.db.session.commit()
+
+    def setSoftwareLanguage_Editor(self, software_id, languageStr):
+        software = self.Software.query.get_or_404(software_id)
+
+        #remove all software language relationships
+        software.compatible_language = []
+
+        languageList = languageStr.split(",")
+        for language_id in languageList:
+            language = self.Language.query.get_or_404(language_id)
+
+            software.compatible_language.append(language)
+        
+        self.db.session.commit()

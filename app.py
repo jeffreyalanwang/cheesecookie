@@ -63,6 +63,38 @@ CourseRequiresCourse = db.Table(
     db.PrimaryKeyConstraint('course_id', 'required_course_id')
 )
 
+class User(db.Model):
+    id = db.Column(db.String, primary_key=True)
+    mod_status = db.Column(db.Boolean, nullable=False, default=False)
+
+    owned_course = db.relationship('Course', uselist=False, backref='owned_by', lazy=True)
+    owned_language = db.relationship('Language', uselist=False, backref='owned_by', lazy=True)
+    owned_software = db.relationship('Software', uselist=False, backref='owned_by', lazy=True)
+
+    def __repr__(self):
+        return '<User: %r>' % self.name
+
+class LanguageGuide(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    path = db.Column(db.String, nullable=False)
+
+    language = db.relationship('Language', uselist=False, backref='guide', lazy=True) #secondary=GuideLanguage, backref='guide')
+    # id that corresponds to software or language, long html text str ( not set size )
+
+    def __repr__(self):
+        return '<Language Guide: %r>' % self.id
+
+class SoftwareGuide(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    path = db.Column(db.String, nullable=False)
+
+    software = db.relationship('Software', uselist=False, backref='guide', lazy=True) #secondary=GuideSoftware, backref='guide')
+
+    # id that corresponds to software or language, long html text str ( not set size )
+
+    def __repr__(self):
+        return '<Software Guide: %r>' % self.id
+
 class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(200), unique=True, nullable=False)
@@ -74,6 +106,8 @@ class Course(db.Model):
     compatible_software = db.relationship('Software', secondary=CourseSoftware, backref='compatible_course')
     course_requires = db.relationship('Course', secondary=CourseRequiresCourse, primaryjoin=(CourseRequiresCourse.c.course_id == id), secondaryjoin=(CourseRequiresCourse.c.required_course_id == id), backref='prerequisite_of')
 
+    user_id = db.Column(db.String, db.ForeignKey(User.id))
+
     def __repr__(self):
         return '<Course: %r>' % self.title
 
@@ -84,6 +118,9 @@ class Language(db.Model):
     download_url = db.Column(db.String(200))
     documentation_url = db.Column(db.String(200))
     description = db.Column(db.String(1000))
+
+    guide_id = db.Column(db.Integer, db.ForeignKey(LanguageGuide.id))
+    user_id = db.Column(db.String, db.ForeignKey(User.id))
 
     compatible_software = db.relationship('Software', secondary=LanguageSoftware, backref='compatible_language')
 
@@ -98,11 +135,18 @@ class Software(db.Model):
     documentation_url = db.Column(db.String(200))
     description = db.Column(db.String(1000))
 
+    guide_id = db.Column(db.Integer, db.ForeignKey(SoftwareGuide.id))
+    user_id = db.Column(db.String, db.ForeignKey(User.id))
+
     def __repr__(self):
         return '<Software: %r>' % self.name
 
+
+
+
+
 # Access database through wrapper class
-db_access = DBAccess(db, Course, Language, Software)
+db_access = DBAccess(db, Course, Language, Software, User, LanguageGuide, SoftwareGuide)
 
 # Defines actions with homepage, requesting the page
 @app.route('/', methods=['GET'])
@@ -335,6 +379,7 @@ def guideEditPage(type, id, guide_id):
 
     return render_template('database_edit/guide_edit.html', guide=guide)
 
+
 @app.route('/<path:type>/new', methods=['GET'])
 def newDatabaseContent(type):
     
@@ -357,6 +402,7 @@ def newDatabaseContent(type):
     id = 0
     # redirect user to edit new page
     return redirect(url_for(editPage.__name__, id=id))
+
 
 # Run in debug mode so errors get displayed
 if __name__ == "__main__":
