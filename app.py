@@ -269,6 +269,12 @@ def imgSave(folder, id, file, filename=None):
     # save image
     file.save(safe_join(folder_path, filename))
 
+# Helper for profile: save new user
+@app.post('/update_user')
+def update_user():
+    # receives POST request with fields: user_id, email, picture_url, name
+    # save in database
+
 # Database pages
 
 @app.route('/course/<int:id>', methods=['GET'])

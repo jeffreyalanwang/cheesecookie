@@ -1,32 +1,59 @@
 var jwtDecode;
+import Cookies from "https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"
 import("https://unpkg.com/jwt-decode@4.0.0/build/esm/index.js").then((module) => {
     jwtDecode = module.jwtDecode;
 });
 
 // Google OAuth
 function handleGToken(token) {
-    let payload = jwtDecode(token["credential"]);
+    const payload = jwtDecode(token["credential"]);
     const user_details = {};
     user_details["user_id"] = payload["sub"];
     user_details["email"] = payload["email"];
     user_details["picture_url"] = payload["picture"];
     user_details["name"] = payload["given_name"] + payload["family_name"];
-    // send server to create user if needed
-    // update cookie
-    update_view();
+    // send to server to create user if needed
+    uploadUser(user_details);
+    // update cookie, update view
+    signIn(user_details['user_id']);
 }
 
-// TODO
-function update_user_cookie() {
+function uploadUser(user_details) {
+    const data = new FormData();
 
+    for (var key in user_details) {
+        data.append(key, user_details[key]);
+    }
+
+    $.ajax({
+        url: '/update_user',
+        type: 'POST',
+        data: data,
+        success: function (result) {
+            console.log("Submitted user");
+        }
+    });
+}
+
+// Set the user cookie, refresh for updated page
+function signIn(user_id) {
+    Cookies.set('user', user_id);
+    location.reload();
+}
+function signOut() {
+    Cookies.remove('user');
+    location.reload();
 }
 
 // call once cookie state is changed
 function update_view() {
-    $(".signed-in").hide();
-    // access cookie
-    // update name in sidebar title and icon in navbar
-    // change which elements display based on whether user logged in
+    if (Cookies.get('user') === undefined) {
+        $(".signed-in").hide();
+        $(".signed-out").show();
+    } else {
+        $(".signed-out").hide();
+        $(".signed-in").show();
+    }
 }
 
 // initial update_view based on cookie
@@ -40,13 +67,10 @@ $(document).ready(function($)
 {
     $("#signOutButton").click(function()
     {
-        // remove cookie
-
-        update_view();
+        // remove cookie, refresh view
+        signOut();
     })
 });
-
-// reminder to jeffrey to write in support for the three other pages
 
 // handle sidebar open/close
 $(document).ready(function($)
