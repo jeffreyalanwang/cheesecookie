@@ -6,7 +6,7 @@ Jeffery Wang
 Written by Mary Johnson
 '''
 
-from flask import Flask, render_template, url_for, request, redirect, send_from_directory
+from flask import Flask, render_template, url_for, request, redirect, send_from_directory, jsonify
 
 # database
 from flask_sqlalchemy import SQLAlchemy
@@ -274,6 +274,9 @@ def imgSave(folder, id, file, filename=None):
 def update_user():
     # receives POST request with fields: user_id, email, picture_url, name
     # save in database
+    
+    # return success
+    return jsonify(success=True)
 
 # Database pages
 
