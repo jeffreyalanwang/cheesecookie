@@ -70,3 +70,6 @@ a {
 .offcanvas-footer {
     padding: var(--bs-offcanvas-padding-y) var(--bs-offcanvas-padding-x);
 }
+.profile-link {
+    cursor: pointer;
+}
