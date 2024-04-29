@@ -156,10 +156,14 @@ def index():
 
 @app.route('/profile', methods=['GET'])
 def userDetailsPage():
-    # i.e. ?user_id=VALUE
-    userId = request.args.get('user_id')
+    user_id = request.cookies.get('user_id')
     # TODO get user attributes from database, pass them to profile.html
-    return render_template('profile.html')
+    user = db_access.getUser(user_id)
+    details = dict()
+    details['email'] = user.email
+    details['picture_url'] = user.picture_url
+    details['name'] = user.name
+    return render_template('profile.html', **details)
 
 @app.route('/my_content', methods=['GET'])
 def userContentPage():
@@ -168,6 +172,13 @@ def userContentPage():
     languages = db_access.allLanguages()
     softwares = db_access.allSoftwares()
     return render_template('my_content.html', softwares=softwares,languages=languages, courses=courses)
+
+@app.route('/all_content', methods=['GET'])
+def allContentPage():
+    courses = db_access.allCourses()
+    languages = db_access.allLanguages()
+    softwares = db_access.allSoftwares()
+    return render_template('all_content.html', softwares=softwares,languages=languages, courses=courses)
 
 @app.route('/explore/', methods=['GET'])
 def explorePage():
@@ -294,7 +305,21 @@ def add_user_details():
 @app.route('/course/<int:id>', methods=['GET'])
 def coursePage(id):
     course = db_access.getCourse(id)
-    return render_template('database/course.html', course=course, languages=course.compatible_language, softwares=course.compatible_software, requires=course.course_requires)
+    owner = db_access.getUser(course.user_id) # implement this. idc how we just need user name and id
+    client_user = db_access.getUser(request.cookies.get('user_id'))
+    if owner.id == client_user.id:
+        user_name = 'You'
+        can_edit = True
+    elif client_user.mod_status:
+        can_edit = True
+    elif owner == None:
+        can_edit = True
+    else:
+        user_name = owner.name
+        can_edit = False
+    return render_template('database/course.html', user=owner, user_name=user_name, editor=can_edit,
+                           course=course,
+                           languages=course.compatible_language, softwares=course.compatible_software, requires=course.course_requires)
 
 @app.route('/course/<int:id>/edit', methods=['POST', 'GET'])
 def courseEditPage(id):
@@ -318,7 +343,8 @@ def courseEditPage(id):
 @app.route('/language/<int:id>', methods=['GET'])
 def languagePage(id):
     language = db_access.getLanguage(id)
-    return render_template('database/language.html', id=id, language=language,courses=language.compatible_course, softwares=language.compatible_software)
+    guides = None #implement
+    return render_template('database/language.html', id=id, guides=guides, language=language,courses=language.compatible_course, softwares=language.compatible_software)
     
 @app.route('/language/<int:id>/edit', methods=['POST', 'GET'])
 def languageEditPage(id):
@@ -390,18 +416,23 @@ def guidePage(type, id, guide_id):
 
 @app.route('/<path:type>/<int:id>/guide/<int:guide_id>/edit', methods=['POST', 'GET'])
 def guideEditPage(type, id, guide_id):
-    # TODO setup this part of database
-    guide = None
+    match type:
+        case "software":
+            target_db = SoftwareGuide
+        case "language":
+            target_db = LanguageGuide
+    guide = target_db.get(guide_id)
 
     if request.method == 'POST':
-            results = request.form
-            # TODO save content in database
+        results = request.form
+        # TODO save content in database
+        # use whatever variables you want for id and path, i'll fix it when i write the frontend form submission
 
-    return render_template('database_edit/guide_edit.html', guide=guide)
+    return render_template('database_edit/guide_edit.html', guide=guide, guideText=guide.path)
 
 
 @app.route('/<path:type>/new', methods=['GET'])
-def newDatabaseContent(type):
+def newDatabaseContent(type, parent_type=None, parent_id=None):
     
     match type:
         case "course":
@@ -413,15 +444,30 @@ def newDatabaseContent(type):
         case "language":
             target_db = Language
             editPage = languageEditPage
+        case "guide":
+            match parent_type:
+                case "software":
+                    target_db = SoftwareGuide
+                case "language":
+                    target_db = LanguageGuide
+            editPage = guideEditPage
         case _:
             app.logger.error('Bad content type')
 
-    # TODO   
+    # TODO the code in the below block is not correct. please implement
     # create new item in target db
-    # get id of new course
-    id = 0
+    item = target_db.newItem()
+    # get id of new course/language/whatever
+    id = item.id
+    # set user id of the created content
+    owner_id = request.cookies.get('user_id')
+    item.owner = owner_id
+
     # redirect user to edit new page
-    return redirect(url_for(editPage.__name__, id=id))
+    if type == "guide":
+        return redirect(url_for(editPage.__name__, type=parent_type, id=parent_id, guide_id=id))
+    else:
+        return redirect(url_for(editPage.__name__, id=id))
 
 
 # Run in debug mode so errors get displayed

@@ -33,7 +33,9 @@
         <a class="nav-link" data-bs-toggle="tooltip" title="Search" href="/search"><i class="material-icons">search</i></a>
         <div data-bs-toggle="tooltip" id="profile-button-div" title="Profile"><a class="nav-link" data-bs-toggle="offcanvas" href="#profile_sidebar"><i class="material-icons">person</i></a></div>
         <a class="nav-link" data-bs-toggle="tooltip" title="Explore" href="/explore"><i class="material-icons">public</i></a>
+        {% if editor %}
         <a class="nav-link" data-bs-toggle="tooltip" title="Edit this page" href="{{ url_for( request.endpoint, **request.view_args)}}/edit" id="edit_button"><i class="material-icons">edit</i></a>
+        {% endif %}
         <button type="submit" form="main-form" class="nav-link btn btn-primary" data-bs-toggle="tooltip" title="Save changes" id="save_button"><i class="material-icons">save</i></button>
         <a class="nav-link" data-bs-toggle="tooltip" title="Back to viewing" href="{{ "/".join(url_for( request.endpoint, **request.view_args).split("/")[:-1]) }}" id="back_button"><i class="material-icons">arrow_back</i></a>
     </nav>

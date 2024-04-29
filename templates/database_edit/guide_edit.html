@@ -150,8 +150,8 @@
 
 			$('#editor').wysiwyg({ fileUploadError: showErrorAlert} );
 
-            {% if guide %}
-                $('#editor').html( {{ guide.content }} );
+            {% if guideText %}
+                $('#editor').html( {{ guideText }} );
             {% endif %}
 
             $('#saveBtn').on('click', function(){

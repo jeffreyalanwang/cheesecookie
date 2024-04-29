@@ -35,3 +35,7 @@ h1 {
     font-size: 3rem;
     font-style: italic;
 }
+
+.col-md-4 {
+    display: flex;
+}

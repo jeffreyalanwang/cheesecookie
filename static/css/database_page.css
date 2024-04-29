@@ -88,3 +88,27 @@
     font-family: var(--font-code-style);
     color: inherit;
 }
+
+#guides-row .links-box {
+    padding-left: 30%;
+    padding-right: 30%;
+}
+#guides-row #title-row {
+    margin-bottom: 3%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+#guides-row #title-row * {
+    margin-bottom: unset;
+    width: unset;
+}
+#guides-row #title-row a {
+    background-color: darkgrey;
+    font: unset;
+
+    display:block;
+    position:absolute;
+    right:0;
+}
