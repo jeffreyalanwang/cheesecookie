@@ -235,7 +235,6 @@ def search():
     else:
         return render_template('search.html', all_course=all_course, all_language=all_language, all_software=all_software)
 
-
 @app.route('/about', methods=['GET'])
 def about():
     # Display the about page.
@@ -277,6 +276,18 @@ def update_user():
     
     # return success
     return jsonify(success=True)
+
+@app.context_processor
+def add_user_details():
+    if request.cookies.get('user') is not None:
+        return dict(
+            user_id = request.cookies.get('user'),
+            email = 'placeholder',
+            picture_url = 'placeholder',
+            name = 'placeholder jones'
+        )
+    else:
+        return dict()
 
 # Database pages
 

@@ -45,7 +45,7 @@
             <div class="signed-out">
                 <h1 class="offcanvas-title">Sign in</h5>
             </div>
-            <h1 class="offcanvas-title signed-in">Welcome, user!</h5>
+            <h1 class="offcanvas-title signed-in">Welcome, {{ name }}!</h5>
         </div>
 
         <div class="offcanvas-body">
@@ -108,7 +108,7 @@
         });
     </script>
     <!-- makes profile sidebar work -->
-    <script src="{{ url_for('static', filename='js/profile_sidebar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/profile_sidebar.js') }}" type="module"></script>
     <!-- Google sign-in -->
     <script src="https://accounts.google.com/gsi/client" async></script>
     {% block scripts %}{% endblock %}

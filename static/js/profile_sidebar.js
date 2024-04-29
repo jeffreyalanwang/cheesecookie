@@ -1,11 +1,11 @@
+import "https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js";
 var jwtDecode;
-import Cookies from "https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"
 import("https://unpkg.com/jwt-decode@4.0.0/build/esm/index.js").then((module) => {
     jwtDecode = module.jwtDecode;
-});
+}); 
 
 // Google OAuth
-function handleGToken(token) {
+window.handleGToken = function (token) {
     const payload = jwtDecode(token["credential"]);
     const user_details = {};
     user_details["user_id"] = payload["sub"];
@@ -16,33 +16,24 @@ function handleGToken(token) {
     uploadUser(user_details);
     // update cookie, update view
     signIn(user_details['user_id']);
-}
+};
 
 function uploadUser(user_details) {
-    const data = new FormData();
-
-    for (var key in user_details) {
-        data.append(key, user_details[key]);
-    }
-
     $.ajax({
         url: '/update_user',
         type: 'POST',
-        data: data,
-        success: function (result) {
-            console.log("Submitted user");
-        }
+        data: user_details
     });
 }
 
 // Set the user cookie, refresh for updated page
 function signIn(user_id) {
     Cookies.set('user', user_id);
-    location.reload();
+    location.reload(false);
 }
 function signOut() {
     Cookies.remove('user');
-    location.reload();
+    location.reload(false);
 }
 
 // call once cookie state is changed
