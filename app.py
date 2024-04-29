@@ -65,6 +65,9 @@ CourseRequiresCourse = db.Table(
 
 class User(db.Model):
     id = db.Column(db.String, primary_key=True)
+    name = db.Column(db.String)
+    email = db.Column(db.String)
+    picture_url = db.Column(db.String)
     mod_status = db.Column(db.Boolean, nullable=False, default=False)
 
     owned_course = db.relationship('Course', uselist=False, backref='owned_by', lazy=True)
@@ -76,7 +79,7 @@ class User(db.Model):
 
 class LanguageGuide(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    path = db.Column(db.String, nullable=False)
+    path = db.Column(db.String)
 
     language = db.relationship('Language', uselist=False, backref='guide', lazy=True) #secondary=GuideLanguage, backref='guide')
     # id that corresponds to software or language, long html text str ( not set size )
@@ -86,7 +89,7 @@ class LanguageGuide(db.Model):
 
 class SoftwareGuide(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    path = db.Column(db.String, nullable=False)
+    path = db.Column(db.String)
 
     software = db.relationship('Software', uselist=False, backref='guide', lazy=True) #secondary=GuideSoftware, backref='guide')
 
@@ -97,9 +100,9 @@ class SoftwareGuide(db.Model):
 
 class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    title = db.Column(db.String(200), unique=True, nullable=False)
-    course_code = db.Column(db.String(9), nullable=False)
-    credit_hours = db.Column(db.Integer,nullable=False)
+    title = db.Column(db.String(200), nullable=False)
+    course_code = db.Column(db.String(9), unique=True)
+    credit_hours = db.Column(db.Integer)
     description = db.Column(db.String(1000))
 
     compatible_language = db.relationship('Language', secondary=CourseLanguage, backref='compatible_course')
@@ -113,7 +116,7 @@ class Course(db.Model):
 
 class Language(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(200), unique=True, nullable=False)
+    name = db.Column(db.String(200), nullable=False)
     site_url = db.Column(db.String(200))
     download_url = db.Column(db.String(200))
     documentation_url = db.Column(db.String(200))
@@ -129,7 +132,7 @@ class Language(db.Model):
 
 class Software(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(200), unique=True, nullable=False)
+    name = db.Column(db.String(200), nullable=False)
     site_url = db.Column(db.String(200))
     download_url = db.Column(db.String(200))
     documentation_url = db.Column(db.String(200))
@@ -284,6 +287,12 @@ def imgSave(folder, id, file, filename=None):
 def update_user():
     # receives POST request with fields: user_id, email, picture_url, name
     # save in database
+
+    results = request.form
+    db_access.setUser(id = results["user_id"],
+                        name = results["name"],
+                        email = results["email"],
+                        picture_url = results["picture_url"])
     
     # return success
     return jsonify(success=True)
@@ -305,18 +314,31 @@ def add_user_details():
 @app.route('/course/<int:id>', methods=['GET'])
 def coursePage(id):
     course = db_access.getCourse(id)
-    owner = db_access.getUser(course.user_id) # implement this. idc how we just need user name and id
     client_user = db_access.getUser(request.cookies.get('user_id'))
-    if owner.id == client_user.id:
+
+    if client_user == None: 
+        client_id = None
+        client_mod_status = False
+    else: 
+        client_id = client_user.id
+        client_mod_status = client_user.mod_status
+    
+    if course.user_id == None:
+        owner = None
+        user_name = 'None'
+        can_edit = True
+    elif course.user_id == client_id:
+        owner = User.query.get_or_404(course.user_id)
         user_name = 'You'
         can_edit = True
-    elif client_user.mod_status:
-        can_edit = True
-    elif owner == None:
-        can_edit = True
     else:
+        owner = User.query.get_or_404(course.user_id)
         user_name = owner.name
         can_edit = False
+
+    if client_mod_status:
+        can_edit = True
+
     return render_template('database/course.html', user=owner, user_name=user_name, editor=can_edit,
                            course=course,
                            languages=course.compatible_language, softwares=course.compatible_software, requires=course.course_requires)
@@ -406,11 +428,16 @@ def softwareEditPage(id):
 # to simplify, we can change the guide feature to only work for software.
 @app.route('/<path:type>/<int:id>/guide/<int:guide_id>', methods=['GET'])
 def guidePage(type, id, guide_id):
-    # TODO setup this part of database
     if type == "software":
-        guide = Software.query.get_or_404(id) # change to get correct guide instead of software itself
+        software = Software.query.get_or_404(id) 
+        guide = SoftwareGuide.query.get_or_404(guide_id) 
+        #if 
+        #app.logger.error('Bad content type')
+        # if not connected return some sort of error page
     if type == "language":
-        guide = Language.query.get_or_404(id) # change to get correct guide instead of software itself
+        language = Language.query.get_or_404(id)
+        guide = LanguageGuide.query.get_or_404(guide_id)
+        # if not connected return some sort of error page
 
     return render_template('database/guide.html', guide=guide)
 
@@ -421,19 +448,21 @@ def guideEditPage(type, id, guide_id):
             target_db = SoftwareGuide
         case "language":
             target_db = LanguageGuide
+
     guide = target_db.get(guide_id)
 
     if request.method == 'POST':
-        results = request.form
-        # TODO save content in database
-        # use whatever variables you want for id and path, i'll fix it when i write the frontend form submission
+            results = request.form
+            # TODO save content in database
+            guide.path = request["path"]
+            db.session.commit()
+
 
     return render_template('database_edit/guide_edit.html', guide=guide, guideText=guide.path)
 
 
 @app.route('/<path:type>/new', methods=['GET'])
 def newDatabaseContent(type, parent_type=None, parent_id=None):
-    
     match type:
         case "course":
             target_db = Course
@@ -454,14 +483,21 @@ def newDatabaseContent(type, parent_type=None, parent_id=None):
         case _:
             app.logger.error('Bad content type')
 
-    # TODO the code in the below block is not correct. please implement
     # create new item in target db
-    item = target_db.newItem()
-    # get id of new course/language/whatever
-    id = item.id
+    if type == "guide":
+        newRow = target_db()
+    elif type == "course":
+        newRow = target_db(title="New " + type.capitalize() + " Entry") # Title is not nullable.
+    else:
+        newRow = target_db(name="New " + type.capitalize() + " Entry") # Name is not nullable.
+    db.session.add(newRow)
+    db.session.commit()
+    # get id of new row
+    id = newRow.id
+    
     # set user id of the created content
     owner_id = request.cookies.get('user_id')
-    item.owner = owner_id
+    newRow.owner = owner_id
 
     # redirect user to edit new page
     if type == "guide":

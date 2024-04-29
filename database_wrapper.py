@@ -10,6 +10,40 @@ class DBAccess:
         self.LanguageGuide = LanguageGuide
         self.SoftwareGuide = SoftwareGuide
 
+    # Add, get user entries
+    # promote & demote users 
+
+    def addUser(self, id=None, mod_status=False, user_name=None, email=None, picture_url=None):
+        user = self.User(id=id, mod_status=mod_status, user_name=user_name, email=email, picture_url=picture_url)
+        self.db.session.add(user)
+        self.db.session.commit()
+
+    def promoteUser(self, id):
+        user = self.db.session.get(self.User, id)
+        user.mod_status = True
+        self.db.session.commit()
+
+    def demoteUser(self, id):
+        user = self.db.session.get(self.User, id)
+        user.mod_status = False
+        self.db.session.commit()
+
+    def getUser(self, id):
+
+        try:
+            user = self.User.query.get(id)
+        except:
+            user = None
+        
+        return user
+
+    def setUser(self, id=None, user_name=None, email=None, picture_url=None):
+        user = self.db.session.get(self.User, id)
+        user.user_name = user_name
+        user.email = email
+        user.picture_url = picture_url
+
+
     # Add, set, get, search database entries
 
     def addCourse(self, title=None, course_code=None, credit_hours=None, description=None):
