@@ -1,10 +1,11 @@
 from app import db
-from app import Course, Language, Software
+from app import Course, Language, Software, User
 from database_wrapper import DBAccess
 
 db.drop_all()
 db.create_all()
 
+mod = User(id="placeholder ID", name="Jeffrey Wang", email="email@placeholder", picture_url="placeholer",mod_status=True)
 
 C1 = Course(id=1, title='Introduction to Computer Systems', course_code='ITSC 2181', credit_hours='4', description='Introduction to computer system abstractions reflected in programming languages, operating systems, architectures, and networks. Topics include: overview of computer and processor architecture, instruction set architecture and introduction to assembly language, C programming, system calls, processes and process memory layout, interfaces for memory allocation and file systems, file and directory management via the command line, network architecture and protocols (such as HTTP, MAC, IP, DNS).')
 C2 = Course(id=2, title='Data Structures and Algorithms', course_code='ITSC 2214', credit_hours='3', description='A study of the theory and implementation of abstract data types (ADTs) including stacks, queues, and both general purpose and specialized trees and graphs.  Includes the implementation and analysis of algorithms related to the various data structures studied, including creation, searching, and traversal of ADTs.')
@@ -114,7 +115,7 @@ L11.compatible_software.append(S9)
 L12.compatible_software.append(S4)
 
 
-
+db.session.add(mod)
 db.session.add_all([C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,C11,C12,C13,C14,C15,C16])
 db.session.add_all([L1,L2,L3,L4,L5,L6,L7,L8,L9,L10,L11,L12])
 db.session.add_all([S1,S2,S3,S4,S5,S6,S7,S8,S9])

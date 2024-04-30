@@ -300,11 +300,12 @@ def update_user():
 @app.context_processor
 def add_user_details():
     if request.cookies.get('user') is not None:
+        user = db_access.getUser(request.cookies.get('user'))
         return dict(
             user_id = request.cookies.get('user'),
-            email = 'placeholder',
-            picture_url = 'placeholder',
-            name = 'placeholder jones'
+            email = user.email,
+            picture_url = user.picture_url,
+            name = user.name
         )
     else:
         return dict()
