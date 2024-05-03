@@ -8,217 +8,215 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<script src="{{ url_for('static', filename='script/search.js') }}" defer></script>
 <title>Search</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
 {% endblock %}
 
+{% block top %}<form id="main-form" action="/search" method="POST" data-bs-theme="dark">{% endblock %}
+{% block bottom %}</form>{% endblock %}
+
 {% block body %}
-<div class="content">
-<div class="header p-5">
-    <h1> <div style="background-color:rgb(185, 185, 185)"><div style="height:75px">What are you searching for?</div></div></h1>
 
-    <form action="/search" method="POST">
-        <div style="font-size:xx-large">
-        <input type="checkbox" id="course" name="search_course" value="1"><label for="course">Courses</label>
-        <input type="checkbox" id="language" name="search_language" value="1"><label for="language">Languages</label>
-        <input type="checkbox" id="software" name="search_software" value="1"><label for="software">Software</label>
-        <br>
+<div id="intro">
+    <h1>What are you searching for?</h1>
+    <div id="checkboxes" class="row">
+        <div class="col-4">
+            <input type="checkbox" id="course_chk" name="search_course" value="1">
+            <label for="course">Courses</label>
         </div>
-
-
-        <!-- 
-            I'd like to make these visible with jquery and event listeners? 
-        -->
-        <div id="queryFields">
-
-        <div id="creditHours_block">
-        <label for="credit_hours">Credit Hours</label><br>
-        <select name="credit_hours" id="credit_hours"><br>
-            <!--
-                I don't know how to make these options based on database values.
-                Need to research more flask stuff to improve here.
-            -->
-            <option value="0"></option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-        </select>
-        
+        <div class="col-4">
+            <input type="checkbox" id="language_chk" name="search_language" value="1">
+            <label for="language">Languages</label>
         </div>
+        <div class="col-4">
+            <input type="checkbox" id="software_chk" name="search_software" value="1">
+            <label for="software">Software</label>
+        </div>
+    </div>
+</div>
 
-        <div id="prereq_block">
-        <label for="prerequisite_course">Prerequisite of Course</label><br>
-        <select name="prerequisite_course" id="prerequisite_course"><br>
+<div id="query-options">
+    <div id="open-close">
+        <h1>Narrow Search</h1><i class="material-icons">expand_more</i>
+    </div>
+    <div id="actual-options" class="row">
+        <div id="creditHours_block" class="dropdown-query-option col-6 for-course">
+            <label for="credit_hours">Credit Hours:</label><br>
+            <select name="credit_hours" id="credit_hours"><br>
+                <!--
+                    I don't know how to make these options based on database values.
+                    Need to research more flask stuff to improve here.
+                -->
+                <option value="0"></option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+        </div>
+        <div id="prereq_block" class="dropdown-query-option col-6 for-course">
+            <label for="prerequisite_course">Prerequisite of Course:</label><br>
+            <select name="prerequisite_course" id="prerequisite_course"><br>
+                
+                <option value="0"></option>
             
-            <option value="0"></option>
-
-            {% if all_course|length > 0  %}
-                {% for course in all_course %} 
-                    <option value="{{ course.id }}">{{course.course_code}}: {{ course.title }}</option>
-                {% endfor %}
-            {% endif %}      
-        </select>
-        
+                {% if all_course|length > 0  %}
+                    {% for course in all_course %} 
+                        <option value="{{ course.id }}">{{course.course_code}}: {{ course.title }}</option>
+                    {% endfor %}
+                {% endif %}      
+            </select>
         </div>
-
-        <div id="req_block">
-        <label for="requires_course">Requires Course</label><br>
-        <select name="requires_course" id="requires_course"><br>
+        <div id="req_block" class="dropdown-query-option col-6 for-course">
+            <label for="requires_course">Requires Course:</label><br>
+            <select name="requires_course" id="requires_course"><br>
+                
+                <option value="0"></option>
             
-            <option value="0"></option>
-
-            {% if all_course|length > 0  %}
-                {% for course in all_course %} 
-                    <option value="{{ course.id }}">{{course.course_code}}: {{ course.title }}</option>
-                {% endfor %}
-            {% endif %}      
-        </select>
-        
+                {% if all_course|length > 0  %}
+                    {% for course in all_course %} 
+                        <option value="{{ course.id }}">{{course.course_code}}: {{ course.title }}</option>
+                    {% endfor %}
+                {% endif %}      
+            </select>
         </div>
-
-        <div id="compCourse_block">
-        <label for="compatible_course">Compatible with Course</label><br>
-        <select name="compatible_course" id="compatible_course"><br>
+        <div id="compCourse_block" class="dropdown-query-option col-6 for-software for-language">
+            <label for="compatible_course">Used in Course:</label><br>
+            <select name="compatible_course" id="compatible_course"><br>
+                
+                <option value="0"></option>
             
-            <option value="0"></option>
-
-            {% if all_course|length > 0  %}
-                {% for course in all_course %} 
-                    <option value="{{ course.id }}">{{course.course_code}}: {{ course.title }}</option>
-                {% endfor %}
-            {% endif %}      
-        </select>
-        
+                {% if all_course|length > 0  %}
+                    {% for course in all_course %} 
+                        <option value="{{ course.id }}">{{course.course_code}}: {{ course.title }}</option>
+                    {% endfor %}
+                {% endif %}      
+            </select>
         </div>
-
-        <div id="compLang_block">
-        <label for="compatible_language">Compatible with Language</label><br>
-        <select name="compatible_language" id="compatible_language"><br>
-            <option value="0"></option>
-            {% if all_language|length > 0  %}
-                {% for language in all_language %} 
-                    <option value="{{ language.id }}">{{ language.name }}</option>
-                {% endfor %}
-            {% endif %}  
-        </select>
-        
+        <div id="compLang_block" class="dropdown-query-option col-6 for-class for-software">
+            <label for="compatible_language">Works with Language:</label><br>
+            <select name="compatible_language" id="compatible_language"><br>
+                <option value="0"></option>
+                {% if all_language|length > 0  %}
+                    {% for language in all_language %} 
+                        <option value="{{ language.id }}">{{ language.name }}</option>
+                    {% endfor %}
+                {% endif %}  
+            </select>
         </div>
-
-        <div id="compSoft_block">
-        <label for="compatible_software">Compatible with Software</label><br>
-        <select name="compatible_software" id="compatible_software"><br>
-            <option value="0"></option>
-            {% if all_software|length > 0  %}
-                {% for software in all_software %} 
-                    <option value="{{ software.id }}">{{ software.name }}</option>
-                {% endfor %}
-            {% endif %}  
-        </select>
-        
+        <div id="compSoft_block" class="dropdown-query-option col-6 for-class for-language">
+            <label for="compatible_software">Works with Software:</label><br>
+            <select name="compatible_software" id="compatible_software"><br>
+                <option value="0"></option>
+                {% if all_software|length > 0  %}
+                    {% for software in all_software %} 
+                        <option value="{{ software.id }}">{{ software.name }}</option>
+                    {% endfor %}
+                {% endif %}  
+            </select>
         </div>
+    </div>
+</div>
 
-        </div>
-        
+<div id='query-final'>
+    <input type="text" id="search-bar" placeholder="Type to search..." name="search_text" hidden>
+    <input type="submit" id="submit-button" value="Search">
+</div>
 
-        <input type="submit" value="Search">
-    
-    </form>
-    <div class="results">
-    <div id="results"><br></div>
+<div id="results">
     {% if err %}
-        <div>{{ err }}</div>
+    <div id="error">
+        <h5>{{ err }}</h5>
+    </div>
+
+    {% else %}
+
+    {% if courses|length > 0 %}
+    <h1>Courses</h1>
+    <div id='result-courses' class="card-group"> 
+        {% for course in courses %}
+        <div class="card-name-combo col-md-4 d-flex justify-content-center"> 
+            <a href="/course/{{ course.id }}" style="text-decoration: none;"> 
+                <div class="card rounded-0">
+                    <div class="card-body">
+                        
+                        <div style="width:100%; height:100%;">
+                            <div class="icon">
+                                {% for line in course.course_code.split() %}
+                                <h class="icon-text">{{ line }}</h>
+                                <br>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div> 
+                <p class="card-text">
+                    {{course.title}}
+                </p>
+            </a> 
+        </div>
+        {% endfor %}
+    </div>
     {% endif %}
 
-    <div class="card-group"> 
-        {% if courses|length < 1 %}
-        {% else %}
-            {% for course in courses %}
-            <div class="col-md-4 d-flex justify-content-center"> 
-                <a href="/course/{{ course.id }}" style="text-decoration: none;"> 
-                    <div class="card border-40 rounded-0">
-                        <div class="card-body">
-                            <img src="">
-                            <div style="width:100%; height:100%;">
-                                <div style="text-align:center; width:100%; height: 100%; display:flex; flex-wrap: wrap; justify-content: center; align-items: center;">
-                                    {% for line in course.course_code.split() %}
-                                    <h class="icon-text">{{ line }}</h>
-                                    <br>
-                                    {% endfor %}
-                                </div>
+    {% if languages|length > 0 %}
+    <h1>Languages</h1>
+    <div id='result-languages' class="card-group"> 
+        {% for language in languages %}
+        <div class="card-name-combo col-md-4 d-flex justify-content-center"> 
+            <a href="/language/{{ language.id }}" style="text-decoration: none;"> 
+                <div class="card rounded-0">
+                    <div class="card-body">
+                        
+                        <div style="width:100%; height:100%;">
+                            <div class="icon">
+                                <img class="icon_img" alt="" src="{{ url_for('img', folder='language', id=language.id) }}">
                             </div>
-    
                         </div>
-                    </div> 
-                    <p class="card-text" style="color: rgb(229, 228, 228); width:10rem; text-align:center; overflow-wrap: break-word;">
-                        {{course.title}}
-                    </p>
-                </a> 
-            </div>
-                    
-            {% endfor %}
-        {% endif %}
+    
+                    </div>
+                </div> 
+                <p class="card-text">
+                    {{language.name}}
+                </p>
+            </a> 
         </div>
-    
-        <div class="card-group"> 
-        {% if languages|length < 1 %}
-        {% else %}
-            {% for language in languages %}
-            <div class="col-md-4 d-flex justify-content-center"> 
-                <a href="/language/{{ language.id }}" style="text-decoration: none;"> 
-                    <div class="card border-40 rounded-0">
-                        <div class="card-body">
-                            <img src="">
-                            <div style="width:100%; height:100%;">
-                                <div style="text-align:center; width:100%; height: 100%; display:flex; flex-wrap: wrap; justify-content: center; align-items: center; overflow-wrap: break-word;">
-                                   
-                                    <h class="icon-text">{{ language.name }}</h>
-                                    <br>
-                                 
-                                </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if softwares|length > 0 %}
+    <h1>Software</h1>
+    <div id='result-softwares' class="card-group"> 
+        {% for software in softwares %} 
+        <div class="card-name-combo col-md-4 d-flex justify-content-center"> 
+            <a href="/software/{{ software.id }}" style="text-decoration: none;"> 
+                <div class="card rounded-0">
+                    <div class="card-body">
+                        
+                        <div style="width:100%; height:100%;">
+                            <div class="icon">
+                                <img class="icon_img" alt="" src="{{ url_for('img', folder='software', id=software.id) }}">
                             </div>
-    
                         </div>
-                    </div> 
-                    <p class="card-text" style="color: rgb(229, 228, 228); width:10rem; text-align:center; overflow-wrap: break-word;">
-                        <br><br><br>
-                    </p>
-                </a> 
-            </div>
-            {% endfor %}
-        {% endif %}
-    </div>
     
-    <div class="card-group"> 
-        {% if softwares|length < 1 %}
-        {% else %}
-            {% for software in softwares %} 
-            <div class="col-md-4 d-flex justify-content-center"> 
-                <a href="/software/{{ software.id }}" style="text-decoration: none;"> 
-                    <div class="card border-40 rounded-0">
-                        <div class="card-body">
-                            <img src="">
-                            <div style="width:100%; height:100%;">
-                                <div style="text-align:center; width:100%; height: 100%; display:flex; flex-wrap: wrap; justify-content: center; align-items: center; overflow-wrap: break-word;">
-                                   
-                                    <h class="icon-text">{{ software.name }}</h>
-                                    <br>
-                                 
-                                </div>
-                            </div>
-    
-                        </div>
-                    </div> 
-                    <p class="card-text" style="color: rgb(229, 228, 228); width:10rem; text-align:center; overflow-wrap: break-word;">
-                        <br><br><br>
-                    </p>
-                </a> 
-            </div>
-            {% endfor %}
-        {% endif %}
+                    </div>
+                </div> 
+                <p class="card-text">
+                    {{software.name}}
+                </p>
+            </a> 
+        </div>
+        {% endfor %}
     </div>
-    
-    </div>
-    </div>
-    {% endblock %}
+    {% endif %}
+
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/search_page.js') }}"></script>
+{% endblock %}
