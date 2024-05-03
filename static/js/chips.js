@@ -109,3 +109,11 @@ $(document).ready(function($)
         }
     });
 });
+
+// enter key should simulate plus button push
+$(".chip-input").on("keydown", (e) => {
+    if(e.which == 13) {
+        e.preventDefault();
+        $(e.target).parent().children('button').trigger('click');
+    }
+});
