@@ -13,8 +13,8 @@ class DBAccess:
     # Add, get user entries
     # promote & demote users 
 
-    def addUser(self, id=None, mod_status=False, user_name=None, email=None, picture_url=None):
-        user = self.User(id=id, mod_status=mod_status, user_name=user_name, email=email, picture_url=picture_url)
+    def addUser(self, id=None, mod_status=False, name=None, email=None, picture_url=None):
+        user = self.User(id=id, mod_status=mod_status, name=name, email=email, picture_url=picture_url)
         self.db.session.add(user)
         self.db.session.commit()
 
@@ -37,12 +37,16 @@ class DBAccess:
         
         return user
 
-    def setUser(self, id=None, user_name=None, email=None, picture_url=None):
+    def setUser(self, id=None, name=None, email=None, picture_url=None):
         user = self.db.session.get(self.User, id)
-        user.user_name = user_name
-        user.email = email
-        user.picture_url = picture_url
+        if user is None:
+            self.addUser(id=id, name=name, email=email, picture_url=picture_url)
+        else:
+            user.name = name
+            user.email = email
+            user.picture_url = picture_url
 
+            self.db.session.commit()
 
     # Add, set, get, search database entries
 
@@ -287,6 +291,9 @@ class DBAccess:
         course.course_requires = []
 
         prereqList = prereqStr.split(",")
+        if not prereqStr:
+            prereqList = []
+
         for prereq_id in prereqList:
             prereq = self.Course.query.get_or_404(prereq_id)
 
@@ -301,6 +308,9 @@ class DBAccess:
         course.prerequisite_of = []
 
         reqList = reqStr.split(",")
+        if not reqStr:
+            reqList = []
+
         for req_id in reqList:
             req = self.Course.query.get_or_404(req_id)
 
@@ -316,11 +326,14 @@ class DBAccess:
         course.compatible_language = []
 
         languageList = languageStr.split(",")
+        if not languageStr:
+            languageList = []
+        
         for language_id in languageList:
             language = self.Language.query.get_or_404(language_id)
 
             course.compatible_language.append(language)
-        
+
         self.db.session.commit()
 
     def setCourseSoftware_Editor(self, course_id, softwareStr):
@@ -330,6 +343,9 @@ class DBAccess:
         course.compatible_software = []
 
         softwareList = softwareStr.split(",")
+        if not softwareStr:
+            softwareList = []
+
         for software_id in softwareList:
             software = self.Software.query.get_or_404(software_id)
 
@@ -345,6 +361,9 @@ class DBAccess:
         language.compatible_course = []
 
         courseList = courseStr.split(",")
+        if not courseStr:
+            courseList = []
+
         for course_id in courseList:
             course = self.Course.query.get_or_404(course_id)
 
@@ -359,6 +378,9 @@ class DBAccess:
         language.compatible_software = []
 
         softwareList = softwareStr.split(",")
+        if not softwareStr:
+            softwareList = []
+
         for software_id in softwareList:
             software = self.Software.query.get_or_404(software_id)
 
@@ -374,6 +396,9 @@ class DBAccess:
         software.compatible_course = []
 
         courseList = courseStr.split(",")
+        if not courseStr:
+            courseList = []
+
         for course_id in courseList:
             course = self.Course.query.get_or_404(course_id)
 
@@ -388,6 +413,9 @@ class DBAccess:
         software.compatible_language = []
 
         languageList = languageStr.split(",")
+        if not languageStr:
+            languageList = []
+
         for language_id in languageList:
             language = self.Language.query.get_or_404(language_id)
 

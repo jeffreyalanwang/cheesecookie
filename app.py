@@ -293,16 +293,17 @@ def update_user():
                         name = results["name"],
                         email = results["email"],
                         picture_url = results["picture_url"])
-    
+
     # return success
     return jsonify(success=True)
 
 @app.context_processor
 def add_user_details():
-    if request.cookies.get('user') is not None:
-        user = db_access.getUser(request.cookies.get('user'))
+    user_id = request.cookies.get('user')
+    user = db_access.getUser(user_id)
+    if user:
         return dict(
-            user_id = request.cookies.get('user'),
+            user_id = user_id,
             email = user.email,
             picture_url = user.picture_url,
             name = user.name
@@ -315,29 +316,20 @@ def add_user_details():
 @app.route('/course/<int:id>', methods=['GET'])
 def coursePage(id):
     course = db_access.getCourse(id)
-    client_user = db_access.getUser(request.cookies.get('user_id'))
-
-    if client_user == None: 
-        client_id = None
-        client_mod_status = False
-    else: 
-        client_id = client_user.id
-        client_mod_status = client_user.mod_status
+    client_user = db_access.getUser(request.cookies.get('user'))
     
-    if course.user_id == None:
-        owner = None
+    owner = course.owned_by
+    if not owner: # no owner
         user_name = 'None'
         can_edit = True
-    elif course.user_id == client_id:
-        owner = User.query.get_or_404(course.user_id)
+    elif owner == client_user: # client is owner
         user_name = 'You'
         can_edit = True
-    else:
-        owner = User.query.get_or_404(course.user_id)
+    else: # owner is someone else
         user_name = owner.name
         can_edit = False
 
-    if client_mod_status:
+    if client_user and client_user.mod_status:
         can_edit = True
 
     return render_template('database/course.html', user=owner, user_name=user_name, editor=can_edit,
@@ -354,6 +346,9 @@ def courseEditPage(id):
                             course_code=results["course_code"],
                             credit_hours=int(results["credit_hours"]),
                             description=results["description"])
+        db_access.setPrereq_Editor(id, results["course_ids"])
+        db_access.setCourseLanguage_Editor(id, results["language_ids"])
+        db_access.setCourseSoftware_Editor(id, results["software_ids"])
 
     all_course = db_access.allCourses(Course.id)
     all_language = db_access.allLanguages(Language.id)
@@ -366,7 +361,7 @@ def courseEditPage(id):
 @app.route('/language/<int:id>', methods=['GET'])
 def languagePage(id):
     language = db_access.getLanguage(id)
-    guides = None #implement
+    guides = language.guides
     return render_template('database/language.html', id=id, guides=guides, language=language,courses=language.compatible_course, softwares=language.compatible_software)
     
 @app.route('/language/<int:id>/edit', methods=['POST', 'GET'])
@@ -385,6 +380,8 @@ def languageEditPage(id):
             imgFile = files['image']
             if imgFile.filename:
                 imgSave('language', id, imgFile)
+        db_access.setLanguageCourse_Editor(id, results["course_ids"])
+        db_access.setLanguageSoftware_Editor(id, results["software_ids"])
 
     all_course = db_access.allCourses(Course.id)
     all_language = db_access.allLanguages(Language.id)
@@ -415,6 +412,8 @@ def softwareEditPage(id):
             imgFile = files['image']
             if imgFile.filename:
                 imgSave('software', id, imgFile)
+        db_access.setSoftwareLanguage_Editor(id, results["language_ids"])
+        db_access.setSoftwareCourse_Editor(id, results["course_ids"])
 
     all_course = db_access.allCourses(Course.id)
     all_language = db_access.allLanguages(Language.id)
@@ -492,13 +491,16 @@ def newDatabaseContent(type, parent_type=None, parent_id=None):
     else:
         newRow = target_db(name="New " + type.capitalize() + " Entry") # Name is not nullable.
     db.session.add(newRow)
+
+    # set user id of the created content
+    owner_id = request.cookies.get('user')
+    newRow.owned_by = db_access.getUser(owner_id) # could set to None if user is not signed in
+
     db.session.commit()
+    
     # get id of new row
     id = newRow.id
     
-    # set user id of the created content
-    owner_id = request.cookies.get('user_id')
-    newRow.owner = owner_id
 
     # redirect user to edit new page
     if type == "guide":

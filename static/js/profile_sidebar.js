@@ -11,18 +11,31 @@ window.handleGToken = function (token) {
     user_details["user_id"] = payload["sub"];
     user_details["email"] = payload["email"];
     user_details["picture_url"] = payload["picture"];
-    user_details["name"] = payload["given_name"] + payload["family_name"];
+    user_details["name"] = payload["given_name"] + " " + payload["family_name"];
+    // don't make the user impatient
+    accountChangeFade();
     // send to server to create user if needed
-    uploadUser(user_details);
-    // update cookie, update view
-    signIn(user_details['user_id']);
+    uploadUser(user_details, () => {
+        // update cookie, update view
+        signIn(user_details['user_id']);
+    });
 };
 
-function uploadUser(user_details) {
+function accountChangeFade() {
+    // don't want an ugly disappearing scrollbar
+    const pageHeight = $('body').css('height');
+    $('body').css('height', pageHeight);
+
+    const target = $('body').children().not("#sidebar");
+    target.fadeOut("fast", "linear");
+}
+
+function uploadUser(user_details, callback) {
     $.ajax({
         url: '/update_user',
         type: 'POST',
-        data: user_details
+        data: user_details,
+        complete: callback
     });
 }
 
@@ -58,6 +71,7 @@ $(document).ready(function($)
 {
     $("#signOutButton").click(function()
     {
+        accountChangeFade();
         // remove cookie, refresh view
         signOut();
     })

@@ -21,21 +21,21 @@ $(document).ready(function($)
             $('.chip-name', '.course-chips').each(function(){
                 course_ids.push($(this).attr("data-id"));
             });
-            if (course_ids.length > 0) {
+            if ($('.course-chips').length ) {
                 data.append("course_ids", course_ids);
             }
             var software_ids = [];
             $('.chip-name', '.software-chips').each(function(){
                 software_ids.push($(this).attr("data-id"));
             });
-            if (software_ids.length > 0) {
+            if ($('.software-chips').length ) {
                 data.append("software_ids", software_ids);
             }
             var language_ids = [];
             $('.chip-name', '.language-chips').each(function(){
                 language_ids.push($(this).attr("data-id"));
             });
-            if (language_ids.length > 0) {
+            if ($('.language-chips').length ) {
                 data.append("language_ids", language_ids);
             }
 
