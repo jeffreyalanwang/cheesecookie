@@ -89,6 +89,10 @@
     color: inherit;
 }
 
+.links-box a:hover {
+    opacity: .8;
+}
+
 #guides-row .links-box {
     padding-left: 30%;
     padding-right: 30%;
@@ -105,7 +109,7 @@
     width: unset;
 }
 #guides-row #title-row a {
-    background-color: darkgrey;
+    background-color: grey;
     font: unset;
 
     display:block;

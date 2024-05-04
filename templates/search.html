@@ -142,7 +142,7 @@
                         
                         <div style="width:100%; height:100%;">
                             <div class="icon">
-                                {% for line in course.course_code.split() %}
+                                {% for line in (course.course_code or '').split() %}
                                 <h class="icon-text">{{ line }}</h>
                                 <br>
                                 {% endfor %}

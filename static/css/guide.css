@@ -1,0 +1,18 @@
+#content {
+    padding: 3rem;
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+#title-div {
+    width: 100%;
+    white-space: nowrap;
+    margin-bottom: 1rem;
+}
+
+#details-div a {
+    color: blue;
+}
+#details-div p {
+    margin-bottom: 0;
+}
