@@ -74,6 +74,10 @@ class User(db.Model):
     owned_language = db.relationship('Language', uselist=False, backref='owned_by', lazy=True)
     owned_software = db.relationship('Software', uselist=False, backref='owned_by', lazy=True)
 
+    owned_languageguide = db.relationship('LanguageGuide', uselist=False, backref='owned_by', lazy=True)
+    owned_softwareguide = db.relationship('SoftwareGuide', uselist=False, backref='owned_by', lazy=True)
+
+
     def __repr__(self):
         return '<User: %r>' % self.name
 
@@ -81,9 +85,10 @@ class LanguageGuide(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     path = db.Column(db.String)
 
-    language = db.relationship('Language', uselist=False, backref='guide', lazy=True) #secondary=GuideLanguage, backref='guide')
-    # id that corresponds to software or language, long html text str ( not set size )
+    language = db.relationship('Language', back_populates='guides') 
 
+    user_id = db.Column(db.String, db.ForeignKey(User.id))
+    
     def __repr__(self):
         return '<Language Guide: %r>' % self.id
 
@@ -91,9 +96,9 @@ class SoftwareGuide(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     path = db.Column(db.String)
 
-    software = db.relationship('Software', uselist=False, backref='guide', lazy=True) #secondary=GuideSoftware, backref='guide')
+    software = db.relationship('Software', back_populates='guides')
 
-    # id that corresponds to software or language, long html text str ( not set size )
+    user_id = db.Column(db.String, db.ForeignKey(User.id))
 
     def __repr__(self):
         return '<Software Guide: %r>' % self.id
@@ -123,6 +128,8 @@ class Language(db.Model):
     description = db.Column(db.String(1000))
 
     guide_id = db.Column(db.Integer, db.ForeignKey(LanguageGuide.id))
+    guides = db.relationship('LanguageGuide', back_populates='language', lazy=True)
+
     user_id = db.Column(db.String, db.ForeignKey(User.id))
 
     compatible_software = db.relationship('Software', secondary=LanguageSoftware, backref='compatible_language')
@@ -139,6 +146,8 @@ class Software(db.Model):
     description = db.Column(db.String(1000))
 
     guide_id = db.Column(db.Integer, db.ForeignKey(SoftwareGuide.id))
+    guides = db.relationship('SoftwareGuide', back_populates='software', lazy=True)
+
     user_id = db.Column(db.String, db.ForeignKey(User.id))
 
     def __repr__(self):
@@ -163,10 +172,20 @@ def userDetailsPage():
 
 @app.route('/my_content', methods=['GET'])
 def userContentPage():
+    user_id = request.cookies.get('user_id')
     # TODO support for individual users
-    courses = db_access.allCourses()
-    languages = db_access.allLanguages()
-    softwares = db_access.allSoftwares()
+    user = db_access.getUser(user_id)
+    if user:
+        courses = user.owned_course
+        languages = user.owned_language
+        softwares = user.owned_software
+    
+    else: # and default for people who aren't logged in? idk if we needed this
+        courses = db_access.allCourses()
+        languages = db_access.allLanguages()
+        softwares = db_access.allSoftwares()
+    
+    
     return render_template('my_content.html', softwares=softwares,languages=languages, courses=courses)
 
 @app.route('/all_content', methods=['GET'])
@@ -436,12 +455,13 @@ def guidePage(type, id, guide_id):
 
 @app.route('/<path:type>/<int:id>/guide/<int:guide_id>/edit', methods=['POST', 'GET'])
 def guideEditPage(type, id, guide_id):
+    
     match type:
         case "software":
             target_db = SoftwareGuide
         case "language":
             target_db = LanguageGuide
-
+    
     guide = target_db.get(guide_id)
 
     if request.method == 'POST':
@@ -456,6 +476,7 @@ def guideEditPage(type, id, guide_id):
 
 @app.route('/<path:type>/new', methods=['GET'])
 def newDatabaseContent(type, parent_type=None, parent_id=None):
+    
     match type:
         case "course":
             target_db = Course
@@ -475,6 +496,7 @@ def newDatabaseContent(type, parent_type=None, parent_id=None):
             editPage = guideEditPage
         case _:
             app.logger.error('Bad content type')
+
 
     # create new item in target db
     if type == "guide":
