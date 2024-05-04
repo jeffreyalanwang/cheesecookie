@@ -367,7 +367,7 @@ class DBAccess:
         for course_id in courseList:
             course = self.Course.query.get_or_404(course_id)
 
-            language.compatible_language.append(course)
+            language.compatible_course.append(course)
         
         self.db.session.commit()
 
@@ -384,7 +384,7 @@ class DBAccess:
         for software_id in softwareList:
             software = self.Software.query.get_or_404(software_id)
 
-            language.compatible_language.append(software)
+            language.compatible_software.append(software)
         
         self.db.session.commit()
     
@@ -402,11 +402,11 @@ class DBAccess:
         for course_id in courseList:
             course = self.Course.query.get_or_404(course_id)
 
-            software.compatible_language.append(course)
+            software.compatible_course.append(course)
         
         self.db.session.commit()
 
-    def setSoftwareLanguage_Editor(self, software_id, languageStr):
+    def setSoftwareLanguage_Editor(self, software_id, languageStr):        
         software = self.Software.query.get_or_404(software_id)
 
         #remove all software language relationships
