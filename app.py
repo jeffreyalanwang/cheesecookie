@@ -159,14 +159,7 @@ def index():
 
 @app.route('/profile', methods=['GET'])
 def userDetailsPage():
-    user_id = request.cookies.get('user_id')
-    # TODO get user attributes from database, pass them to profile.html
-    user = db_access.getUser(user_id)
-    details = dict()
-    details['email'] = user.email
-    details['picture_url'] = user.picture_url
-    details['name'] = user.name
-    return render_template('profile.html', **details)
+    return render_template('profile.html')
 
 @app.route('/my_content', methods=['GET'])
 def userContentPage():
