@@ -21,7 +21,7 @@
         <!-- Icon or course code -->
         <div class="col-xl-4"> <div class="ratio ratio-1x1">
             <div id="icon">
-                <div> {% for line in course.course_code.split() %}
+                <div> {% for line in (course.course_code or '').split() %}
 
                         <h class="icon-text">{{ line }}</h>
                         <br>

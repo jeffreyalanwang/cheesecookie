@@ -83,6 +83,7 @@ class User(db.Model):
 
 class LanguageGuide(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String)
     path = db.Column(db.String)
 
     language = db.relationship('Language', back_populates='guides') 
@@ -94,6 +95,7 @@ class LanguageGuide(db.Model):
 
 class SoftwareGuide(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String)
     path = db.Column(db.String)
 
     software = db.relationship('Software', back_populates='guides')
@@ -172,8 +174,7 @@ def userDetailsPage():
 
 @app.route('/my_content', methods=['GET'])
 def userContentPage():
-    user_id = request.cookies.get('user_id')
-    # TODO support for individual users
+    user_id = request.cookies.get('user')
     user = db_access.getUser(user_id)
     if user:
         courses = user.owned_course
@@ -184,7 +185,6 @@ def userContentPage():
         courses = db_access.allCourses()
         languages = db_access.allLanguages()
         softwares = db_access.allSoftwares()
-    
     
     return render_template('my_content.html', softwares=softwares,languages=languages, courses=courses)
 
@@ -210,8 +210,7 @@ def search():
     all_language = db_access.allLanguages(Language.id)
     all_software = db_access.allSoftwares(Software.id)
 
-    if request.method == 'POST':       
-        # TODO gather categories/search terms/narrowing factors/
+    if request.method == 'POST':
 
         searchCourse = request.form.get('search_course', False)
         searchLanguage = request.form.get('search_language', False)
@@ -227,7 +226,6 @@ def search():
         requiresCourse = request.form.get('requires_course',False)
         
         try:
-            # TODO perform the SQL queries to get the results list
             
             # If course
             if searchCourse:
@@ -254,7 +252,7 @@ def search():
                 softwares = []
 
         
-            return render_template('search.html', all_course=all_course, all_language=all_language, all_software=all_software, courses=courses, languages=languages, softwares=softwares) #  TODO Add a # to direct to top of results
+            return render_template('search.html', all_course=all_course, all_language=all_language, all_software=all_software, courses=courses, languages=languages, softwares=softwares)
         except:
             return render_template('search.html', all_course=all_course, all_language=all_language, all_software=all_software, err="There was an error with completing your search.")
 
@@ -318,7 +316,8 @@ def add_user_details():
             user_id = user_id,
             email = user.email,
             picture_url = user.picture_url,
-            name = user.name
+            name = user.name,
+            mod_status = user.mod_status
         )
     else:
         return dict()
@@ -373,8 +372,24 @@ def courseEditPage(id):
 @app.route('/language/<int:id>', methods=['GET'])
 def languagePage(id):
     language = db_access.getLanguage(id)
+    client_user = db_access.getUser(request.cookies.get('user'))
+    
+    owner = language.owned_by
+    if not owner: # no owner
+        user_name = 'None'
+        can_edit = True
+    elif owner == client_user: # client is owner
+        user_name = 'You'
+        can_edit = True
+    else: # owner is someone else
+        user_name = owner.name
+        can_edit = False
+
+    if client_user and client_user.mod_status:
+        can_edit = True
+
     guides = language.guides
-    return render_template('database/language.html', id=id, guides=guides, language=language,courses=language.compatible_course, softwares=language.compatible_software)
+    return render_template('database/language.html', id=id, editor=can_edit, user_name=user_name, guides=guides, language=language,courses=language.compatible_course, softwares=language.compatible_software)
     
 @app.route('/language/<int:id>/edit', methods=['POST', 'GET'])
 def languageEditPage(id):
@@ -406,7 +421,24 @@ def languageEditPage(id):
 @app.route('/software/<int:id>', methods=['GET'])
 def softwarePage(id):
     software = db_access.getSoftware(id)
-    return render_template('database/software.html', software=software, id=id, languages=software.compatible_language, courses=software.compatible_course)
+    client_user = db_access.getUser(request.cookies.get('user'))
+    
+    owner = software.owned_by
+    if not owner: # no owner
+        user_name = 'None'
+        can_edit = True
+    elif owner == client_user: # client is owner
+        user_name = 'You'
+        can_edit = True
+    else: # owner is someone else
+        user_name = owner.name
+        can_edit = False
+
+    if client_user and client_user.mod_status:
+        can_edit = True
+
+    guides = software.guides
+    return render_template('database/software.html', editor=can_edit, user_name=user_name, software=software, guides=guides, id=id, languages=software.compatible_language, courses=software.compatible_course)
 
 @app.route('/software/<int:id>/edit', methods=['POST', 'GET'])
 def softwareEditPage(id):
@@ -437,46 +469,75 @@ def softwareEditPage(id):
 
 # e.g. /software/1/guide/1
 # type can be language or software.
-# to simplify, we can change the guide feature to only work for software.
 @app.route('/<path:type>/<int:id>/guide/<int:guide_id>', methods=['GET'])
 def guidePage(type, id, guide_id):
-    if type == "software":
-        software = Software.query.get_or_404(id) 
-        guide = SoftwareGuide.query.get_or_404(guide_id) 
-        #if 
-        #app.logger.error('Bad content type')
-        # if not connected return some sort of error page
-    if type == "language":
-        language = Language.query.get_or_404(id)
-        guide = LanguageGuide.query.get_or_404(guide_id)
-        # if not connected return some sort of error page
-
-    return render_template('database/guide.html', guide=guide)
-
-@app.route('/<path:type>/<int:id>/guide/<int:guide_id>/edit', methods=['POST', 'GET'])
-def guideEditPage(type, id, guide_id):
     
     match type:
         case "software":
+            parent_db = Software
             target_db = SoftwareGuide
         case "language":
+            parent_db = Language
             target_db = LanguageGuide
+    guide = target_db.query.get_or_404(guide_id)
+
+    owner = guide.owned_by
+    client_user = db_access.getUser(request.cookies.get('user'))
+    if not owner: # no owner
+        user_name = 'None'
+        can_edit = True
+    elif owner == client_user: # client is owner
+        user_name = 'You'
+        can_edit = True
+    else: # owner is someone else
+        user_name = owner.name
+        can_edit = False
+
+    data = dict(guide = guide)
+
+    data['title'] = guide.name
+    data['guideText'] = guide.path
+    data['user_name'] = user_name
     
-    guide = target_db.get(guide_id)
+    data['parent_href'] = '/{type}/{id}'.format(type=type, id=id)
+    data['parent_name'] = parent_db.query.get_or_404(id).name
+
+    data['editor'] = can_edit
+
+    return render_template('database/guide.html', **data)
+
+@app.route('/<path:type>/<int:id>/guide/<int:guide_id>/edit', methods=['POST', 'GET'])
+def guideEditPage(type, id, guide_id):
+
+    match type:
+        case "software":
+            parent_db = Software
+            target_db = SoftwareGuide
+        case "language":
+            parent_db = Language
+            target_db = LanguageGuide
+    guide = target_db.query.get_or_404(guide_id)
 
     if request.method == 'POST':
-            results = request.form
-            # TODO save content in database
-            guide.path = request["path"]
-            db.session.commit()
+        results = request.form
+        guide.name = results["title"]
+        guide.path = results["html_content"]
+        db.session.commit()
 
+    data = dict(guide = guide)
 
-    return render_template('database_edit/guide_edit.html', guide=guide, guideText=guide.path)
+    data['title'] = guide.name
+    data['guideText'] = guide.path.replace('"', '\\"')
+    
+    data['parent_name'] = parent_db.query.get_or_404(id).name
+
+    return render_template('database_edit/guide_edit.html', **data)
 
 
 @app.route('/<path:type>/new', methods=['GET'])
+@app.route('/<path:parent_type>/<path:parent_id>/<path:type>/new', methods=['GET'])
 def newDatabaseContent(type, parent_type=None, parent_id=None):
-    
+
     match type:
         case "course":
             target_db = Course
@@ -501,6 +562,11 @@ def newDatabaseContent(type, parent_type=None, parent_id=None):
     # create new item in target db
     if type == "guide":
         newRow = target_db()
+        match parent_type:
+            case "software":
+                newRow.software=db_access.getSoftware(parent_id)
+            case "language":
+                newRow.language=db_access.getLanguage(parent_id)
     elif type == "course":
         newRow = target_db(title="New " + type.capitalize() + " Entry") # Title is not nullable.
     else:

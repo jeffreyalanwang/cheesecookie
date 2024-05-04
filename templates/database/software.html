@@ -121,6 +121,27 @@
 
     </div>
 
+    <div id="guides-row" class="row g-5"> <div class="col-xl-12">
+        <div class="links-box">
+            <div id='title-row' class="row">
+                <h style="text-align: center;">Setup guides</h>
+                <a href="{{ url_for('newDatabaseContent', parent_type='software', parent_id=id, type='guide') }}">+ Add</a>
+            </div>
+
+            {% if not guides or guides|length < 1  %}
+                <p style="font-weight: bold;">None</p>
+            {% else %}
+                <ul>
+                    {% for guide in guides %} 
+                        <li> <a href="guide/{{ guide.id }}">
+                            {{ guide.title }}
+                        </a> </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div> </div>
+
 </div>
 
 {% endblock %}

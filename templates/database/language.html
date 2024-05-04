@@ -125,10 +125,10 @@
         <div class="links-box">
             <div id='title-row' class="row">
                 <h style="text-align: center;">Setup guides</h>
-                <a href="{{ url_for('newDatabaseContent', type='guide', parent_type='language', parent_id=id) }}">+ Add</a>
+                <a href="{{ url_for('newDatabaseContent', parent_type='language', parent_id=id, type='guide') }}">+ Add</a>
             </div>
 
-            {% if guides|length < 1  %}
+            {% if not guides or guides|length < 1  %}
                 <p style="font-weight: bold;">None</p>
             {% else %}
                 <ul>

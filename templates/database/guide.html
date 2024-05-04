@@ -9,25 +9,29 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>{{ guide.title }}</title>
+<title>Guide: {{ title }}</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/database_page.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/guide.css') }}">
 {% endblock %}
 
 {% block body %}
 
-<div class="jumbotron p-5">
+<div id="title-div">
+    <h1 style="display: inline;">
+        {{ title }}
+    </h1>
+</div>
 
-    <div id="title-div">
-        <h1 style="display: inline;">
-            {{ guide.title }}
-        </h1>
-    </div>
+<div id="details-div">
+    <p>For: <b><a data-bs-toggle="tooltip" data-bs-title="Back to main page" href="{{ parent_href }}"><i class="material-icons" style="font-size:medium; vertical-align: bottom; margin-bottom: .25rem">arrow_back</i> {{ parent_name }}</a></b></p>
+    <p>Author: <b>{{ user_name }}</b></p>
+</div>
 
-    <hr>
+<hr>
 
-    <!-- content is already in HTML format -->
-    {{ guide.content }}
-
+<!-- content is already in HTML format -->
+<div id="user_html">
+    {{ guideText | safe }}
 </div>
 
 {% endblock %}

@@ -9,76 +9,89 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>{{ course.title }}</title>
+<title>My Profile</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 {% endblock %}
 
 {% block body %}
 
 <div id="blocks" class="container mt-5">
-    <div id="header-row" class="row g-5">
+    <div id="header-row" class="row">
         
-        <!-- Icon or course code -->
-        <div class="col-xl-4"> <div class="ratio ratio-1x1">
-            <div id="icon">
-                <div>
+        <!-- Welcome message -->
+        <div class="col-xl-6">
+            <div class="ratio ratio-1x1"> <div id="icon">
+                <p id='intro-line-small'>
                     Welcome to...
+                </p>
+                <div id='intro-line-big'>
+                    <p>The<br>Array</p>
+                </div>
+            </div> </div> 
+        </div>
+
+        <!-- Info panel -->
+        <div class="col-xl-6"> <div id="details" class="overflow-auto">
+
+            <img src="{{ picture_url }}" class="rounded-circle shadow-lg"
+                onerror="this.src = 
+                    '{{ url_for('static', filename='img/user.svg') }}'
+                ;">
+
+            <h>Hello{% if user_id %}, {{ name }}{% endif %}!</h>
+
+            {% if user_id %}
+            <div id="user-properties" class="container">
+                <div class="prop row">
+                    <div class="col-sm-6 prop_label"> 
+                        Email
+                    </div>
+                    <div class="col-sm-6 prop_text"> 
+                        {{ email }}
+                    </div>
+                </div>
+                <div class="prop row">
+                    <div class="col-sm-6 prop_label"> 
+                        Moderator
+                    </div>
+                    <div class="col-sm-6 prop_text"> 
+                        {{ {True: 'Yes', False: 'No'}[mod_status] }}
+                    </div>
+                </div>
+                <div class="prop-advanced">
+                    <div class="prop row">
+                        <div class="col-sm-6 prop_label"> 
+                            User ID
+                        </div>
+                        <div class="col-sm-6 prop_text"> 
+                            {{ user_id }}
+                        </div>
+                    </div>
+                    <div id="prop-advanced-hint" class="row">
+                        <p class="col-sm-12">Hover for advanced info.</p>
+                    </div>
                 </div>
             </div>
-        </div> </div>
-
-        <!-- Info card -->
-        <div class="col-xl-8"> <div id="details" class="overflow-auto">
-
-            <!-- Title -->
-            <h id="title" class="d-flex justify-content-center mb-3">{{ course.title }}</h>
-            
-            <!-- Info -->
-            <div class="container">
-                
-                <div class="row">
-                    <div class="col-sm-6 info_category"> 
-                        Course code
-                    </div>
-                    <div class="col-sm-6 info_text"> 
-                        {{ course.course_code }}
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-6 info_category"> 
-                        Credit hours
-                    </div>
-                    <div class="col-sm-6 info_text"> 
-                        {{ course.credit_hours }}
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-6 info_category"> 
-                        Prerequisites
-                    </div>
-                    <div class="col-sm-6 info_text"> 
-                        {% if requires|length < 1  %}
-                        No Prerequisites
-
-                        {% else %} {% for i in range(0,requires|length) %} 
-                        <a href="/course/{{ requires[i].id }}">{{ requires[i].course_code }}</a>{% if i != requires|length-1 %}, {% endif %}
-                        {% endfor %}
-
-                        {% endif %}
-                    </div>
-                </div> 
-
+            {% else %}
+            <div>
+                Click here to log in.
             </div>
-
-            <!-- Description -->
-            {% if course.description %}
-            <p class="mt-4">{{ course.description }}</p>
             {% endif %}
 
         </div> </div>
 
     </div>
+</div>
 
+{% endblock %}
+
+{% block scripts %}
+    {% if not user_id %}
+    <script>
+        $('#details').children().css('cursor', 'pointer');
+        $('#details').on('click', function () {
+            $('a', '#profile-button-div')[0].click();
+        });
+    </script>
+    {% endif %}
 {% endblock %}
