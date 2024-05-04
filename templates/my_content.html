@@ -22,7 +22,7 @@
 </div>
 
 <div class="card-group"> 
-    {% if courses|length > 0  %}
+    {% if courses and courses|length > 0  %}
         {% for course in courses %}
         
         <div class="card-name-combo col-md-4 d-flex justify-content-center"> 
@@ -57,7 +57,7 @@
 </div>
 
 <div class="card-group"> 
-{% if softwares|length > 0  %}
+{% if software and softwares|length > 0  %}
     {% for software in softwares %}
     
     <div class="card-name-combo col-md-4 d-flex justify-content-center"> 
@@ -89,7 +89,7 @@
 </div>
 
 <div class="card-group"> 
-{% if languages|length > 0  %}
+{% if languages and languages|length > 0  %}
     {% for language in languages %}
     
     <div class="card-name-combo col-md-4 d-flex justify-content-center"> 

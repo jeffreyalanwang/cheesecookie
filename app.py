@@ -176,6 +176,7 @@ def userDetailsPage():
 def userContentPage():
     user_id = request.cookies.get('user')
     user = db_access.getUser(user_id)
+    app.logger.info(user)
     if user:
         courses = user.owned_course
         languages = user.owned_language
@@ -527,7 +528,10 @@ def guideEditPage(type, id, guide_id):
     data = dict(guide = guide)
 
     data['title'] = guide.name
-    data['guideText'] = guide.path.replace('"', '\\"')
+    if guide.path:
+        data['guideText'] = guide.path.replace('"', '\\"')
+    else:
+        data['guideText'] = ''
     
     data['parent_name'] = parent_db.query.get_or_404(id).name
 
@@ -564,9 +568,9 @@ def newDatabaseContent(type, parent_type=None, parent_id=None):
         newRow = target_db()
         match parent_type:
             case "software":
-                newRow.software=db_access.getSoftware(parent_id)
+                newRow.software.append(db_access.getSoftware(parent_id))
             case "language":
-                newRow.language=db_access.getLanguage(parent_id)
+                newRow.language.append(db_access.getLanguage(parent_id))
     elif type == "course":
         newRow = target_db(title="New " + type.capitalize() + " Entry") # Title is not nullable.
     else:

@@ -128,15 +128,15 @@
                 <a href="{{ url_for('newDatabaseContent', parent_type='language', parent_id=id, type='guide') }}">+ Add</a>
             </div>
 
-            {% if not guides or guides|length < 1  %}
+            {% if not guides %}
                 <p style="font-weight: bold;">None</p>
             {% else %}
                 <ul>
-                    {% for guide in guides %} 
-                        <li> <a href="guide/{{ guide.id }}">
-                            {{ guide.title }}
+                    {#% for guide in guides %#} 
+                        <li> <a href="{{ id }}/guide/{{ guides.id }}">
+                            {{ guides.name }}
                         </a> </li>
-                    {% endfor %}
+                    {#% endfor %#}
                 </ul>
             {% endif %}
         </div>
